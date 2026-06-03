@@ -1,0 +1,72 @@
+name: Validate Skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate every SKILL.md against the Agent Skills spec
+        run: |
+          python <<'PY'
+          import re, pathlib, sys
+
+          ROOT = pathlib.Path(".claude/skills")
+          NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
+          all_ok = True
+
+          for md in sorted(ROOT.rglob("SKILL.md")):
+              text = md.read_text(encoding="utf-8")
+              fm = text.split("---", 2)
+              if len(fm) < 3:
+                  print(f"::error file={md}::missing YAML frontmatter")
+                  all_ok = False
+                  continue
+              name = next((l.split(":", 1)[1].strip()
+                          for l in fm[1].split("\n") if l.startswith("name:")), "")
+              desc = next((l.split(":", 1)[1].strip()
+                          for l in fm[1].split("\n") if l.startswith("description:")), "")
+
+              if not NAME_RE.match(name):
+                  print(f"::error file={md}::name '{name}' does not match ^[a-z0-9][a-z0-9-]{{0,63}}$")
+                  all_ok = False
+              if name != md.parent.name:
+                  print(f"::error file={md}::name '{name}' does not match parent directory '{md.parent.name}'")
+                  all_ok = False
+              if not desc:
+                  print(f"::error file={md}::missing description")
+                  all_ok = False
+              elif len(desc) > 1024:
+                  print(f"::error file={md}::description {len(desc)} chars > 1024 limit")
+                  all_ok = False
+              else:
+                  print(f"OK: {md.parent.name} (name={name}, desc={len(desc)} chars)")
+
+          sys.exit(0 if all_ok else 1)
+          PY
+
+      - name: Validate slash commands have description
+        run: |
+          python <<'PY'
+          import pathlib, sys
+          all_ok = True
+          for md in sorted(pathlib.Path(".claude/commands").glob("*.md")):
+              text = md.read_text(encoding="utf-8")
+              if "description:" not in text.split("---", 2)[1] if "---" in text else "":
+                  print(f"::error file={md}::missing description in frontmatter")
+                  all_ok = False
+              else:
+                  print(f"OK: /{md.stem}")
+          sys.exit(0 if all_ok else 1)
+          PY

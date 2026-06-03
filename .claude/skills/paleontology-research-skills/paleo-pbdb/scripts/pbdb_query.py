@@ -24,8 +24,8 @@ if _SHARED not in sys.path:
 from paleo_common import load_profile, normalize_taxon, print_json  # noqa: E402
 
 PBDB_URL = "https://paleobiodb.org/data1.2/occs/list.json"
-DEFAULT_TIMEOUT = 30
-UA = "Paleontology-Research-Skills/1.0 (https://paleontology-research-skills.local; mailto:noreply@example.org)"
+TIMEOUT = 30
+UA = "Paleontology-Research-Skills/1.0 (https://github.com/syxscott/Paleontology-Research-Skills; mailto:syxemail@yeah.net)"
 
 
 def _request(params):
@@ -33,7 +33,7 @@ def _request(params):
     url = f"{PBDB_URL}?{qs}"
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
     try:
-        with urllib.request.urlopen(req, timeout=DEFAULT_TIMEOUT) as resp:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
             data = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         return {"error": f"HTTP {e.code}: {e.reason}", "url": url, "records": []}

@@ -1,0 +1,31 @@
+# Always use LF line endings inside the repository.
+# Windows checkouts will see CRLF locally if core.autocrlf=true,
+# but git always stores LF.
+
+* text=auto eol=lf
+
+# Explicit text files
+*.py    text eol=lf
+*.md    text eol=lf
+*.json  text eol=lf
+*.toml  text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.txt   text eol=lf
+LICENSE text eol=lf
+Makefile text eol=lf
+
+# Binaries (never line-ending convert)
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.tif  binary
+*.tiff binary
+*.bmp  binary
+*.webp binary
+*.xlsx binary
+*.xls  binary
+*.zip  binary
+*.gz   binary
+*.tar  binary

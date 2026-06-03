@@ -20,7 +20,7 @@ from paleo_common import print_json  # noqa: E402
 
 PBDB_COLLS = "https://paleobiodb.org/data1.2/colls/list.json"
 PBDB_OCCS = "https://paleobiodb.org/data1.2/occs/list.json"
-UA = "Paleontology-Research-Skills/1.0 (mailto:noreply@example.org)"
+UA = "Paleontology-Research-Skills/1.0 (https://github.com/syxscott/Paleontology-Research-Skills; mailto:syxemail@yeah.net)"
 TIMEOUT = 30
 
 

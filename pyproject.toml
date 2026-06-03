@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "paleontology-research-skills"
+version = "1.0.0"
+description = "A modular paleontology research toolkit for Claude Code — 1 parent + 12 focused Agent Skills (PBDB / CrossRef / Semantic Scholar / arXiv / NCBI / Wikidata / Macrostrat / ICS time scale / geometric morphometrics / orchestrator / Chinese news), plus 13 slash commands."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [
+    { name = "Syxscott", email = "syxemail@yeah.net" },
+]
+keywords = [
+    "claude-code", "agent-skills", "paleontology", "pbdb",
+    "crossref", "morphometrics", "geo-time", "fossil",
+    "research", "taxonomy", "stratigraphy",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+# Base toolkit has ZERO runtime dependencies
+dependencies = []
+
+[project.optional-dependencies]
+# Required only for the morphometric sub-skills
+morphometric = [
+    "Pillow>=10.0",
+    "openpyxl>=3.0",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4",
+    "Pillow>=10.0",
+    "openpyxl>=3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/syxscott/Paleontology-Research-Skills"
+Repository = "https://github.com/syxscott/Paleontology-Research-Skills"
+"Bug Tracker" = "https://github.com/syxscott/Paleontology-Research-Skills/issues"
+"Agent Skills Spec" = "https://agentskills.io/specification"
+
+# This project ships Claude Code skills + slash commands, NOT importable
+# Python modules. We still declare layout for IDE friendliness.
+[tool.setuptools]
+packages = []
+include-package-data = true
+
+[tool.ruff]
+line-length = 110
+target-version = "py39"
+
+[tool.ruff.lint]
+# Be opinionated but not heavy-handed
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = [
+    "E501",   # line too long — we already cap at 110
+    "B008",   # function call as default arg — fine for argparse
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

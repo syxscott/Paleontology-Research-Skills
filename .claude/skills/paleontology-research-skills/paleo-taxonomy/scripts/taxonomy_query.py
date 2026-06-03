@@ -20,7 +20,7 @@ from paleo_common import print_json  # noqa: E402
 PBDB_SINGLE = "https://paleobiodb.org/data1.2/taxa/single.json"
 PBDB_LIST = "https://paleobiodb.org/data1.2/taxa/list.json"
 TIMEOUT = 30
-UA = "Paleontology-Research-Skills/1.0 (https://paleoclaw.local; mailto:noreply@example.org)"
+UA = "Paleontology-Research-Skills/1.0 (https://github.com/syxscott/Paleontology-Research-Skills; mailto:syxemail@yeah.net)"
 
 # Standard rank hierarchy from high to low
 RANK_ORDER = [

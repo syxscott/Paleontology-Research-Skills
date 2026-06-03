@@ -25,7 +25,7 @@ from paleo_common import print_json, load_profile  # noqa: E402
 
 S2_SEARCH = "https://api.semanticscholar.org/graph/v1/paper/search"
 S2_PAPER = "https://api.semanticscholar.org/graph/v1/paper"
-UA = "Paleontology-Research-Skills/1.0 (mailto:noreply@example.org)"
+UA = "Paleontology-Research-Skills/1.0 (https://github.com/syxscott/Paleontology-Research-Skills; mailto:syxemail@yeah.net)"
 TIMEOUT = 30
 
 DEFAULT_FIELDS = (

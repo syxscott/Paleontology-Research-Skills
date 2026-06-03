@@ -26,8 +26,9 @@ if _SHARED not in sys.path:
 from paleo_common import print_json  # noqa: E402
 
 UA = ("Mozilla/5.0 (compatible; Paleontology-Research-Skills/1.0; "
-      "+https://paleoclaw.local; respectful crawler)")
-TIMEOUT = 20
+      "+https://github.com/syxscott/Paleontology-Research-Skills; "
+      "respectful crawler)")
+TIMEOUT = 30
 
 SOURCES = {
     "nkocs": {

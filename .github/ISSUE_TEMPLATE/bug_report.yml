@@ -1,0 +1,93 @@
+name: 🐛 Bug report
+description: Something doesn't work as expected.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please fill in the fields below so we can reproduce.
+
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Which skill / script?
+      options:
+        - paleo-pbdb
+        - paleo-crossref
+        - paleo-memory
+        - paleo-session
+        - paleo-profile
+        - paleo-geo-time
+        - paleo-taxonomy
+        - paleo-stratigraphy
+        - paleo-morphometric
+        - paleo-morphometric-convert
+        - paleo-research-assistant
+        - paleo-china-news
+        - parent (paleontology-research-skills)
+        - slash command
+        - shared utilities (paleo_common / taxonomy)
+        - other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Command you ran
+      description: Exact CLI invocation (or natural-language prompt to Claude Code)
+      render: bash
+      placeholder: |
+        python3 .claude/skills/paleontology-research-skills/paleo-pbdb/scripts/pbdb_query.py --base-name Allosaurus --limit 5
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior (paste JSON output or error message)
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "3.12.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Linux
+        - macOS
+        - Windows
+        - WSL
+        - other
+    validations:
+      required: true
+
+  - type: input
+    id: install
+    attributes:
+      label: Installation scope
+      description: How did you install (project-scope `.claude/` or user-scope `~/.claude/`)?
+      placeholder: "user-scope"
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Logs, screenshots, related issues, etc.

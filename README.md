@@ -1,11 +1,34 @@
-# Paleontology Research Skills
+# Paleontology Research Skills 🦕
 
 > A modular paleontology research toolkit packaged as a **nested Claude Code
-> Agent Skill**. One parent skill (`paleontology-research-skills`) acts as the discovery entry
-> point; six focused sub-skills each handle one concrete capability.
+> Agent Skill**. One parent skill (`paleontology-research-skills`) acts as the
+> broad discovery entry; **twelve focused sub-skills** each handle one
+> concrete capability — and there are **thirteen slash commands** for explicit
+> manual invocation.
 
-[![Spec](https://img.shields.io/badge/spec-Agent_Skills-blue)](https://agentskills.io/specification)
-[![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+[![Agent Skills](https://img.shields.io/badge/spec-Agent_Skills-blue)](https://agentskills.io/specification)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-purple?logo=anthropic&logoColor=white)](https://github.com/anthropics/claude-code)
+[![Skills: 13](https://img.shields.io/badge/skills-13-orange)](#-sub-skill-cheat-sheet)
+[![Slash commands: 13](https://img.shields.io/badge/slash_commands-13-orange)](#way-2-slash-commands-explicit-manual-control)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](./CHANGELOG.md)
+
+---
+
+## 📑 Table of contents
+
+- [Why a nested layout?](#-why-a-nested-layout)
+- [Directory layout](#-directory-layout)
+- [Two ways to invoke the toolkit](#-two-ways-to-invoke-the-toolkit)
+  - [Way 1: natural-language prompts](#way-1-natural-language-prompts-skills-auto-trigger)
+  - [Way 2: slash commands](#way-2-slash-commands-explicit-manual-control)
+- [Installation](#-installation)
+- [Smoke test](#-smoke-test)
+- [Design principles](#-design-principles)
+- [Contributing](#-contributing)
+- [Changelog](./CHANGELOG.md)
+- [License](#-license)
 
 ---
 
@@ -201,6 +224,21 @@ python3 -m unittest discover tests
 
 ---
 
+## 🤝 Contributing
+
+Pull requests are welcome! See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the
+full guide, including how to add a new sub-skill, code style, and the PR
+workflow.
+
+For bug reports and feature requests, please use the
+[GitHub Issues](https://github.com/syxscott/Paleontology-Research-Skills/issues/new/choose).
+
+For security vulnerabilities, see [`SECURITY.md`](./SECURITY.md).
+
+Code of Conduct: [Contributor Covenant 2.1](./CODE_OF_CONDUCT.md).
+
+---
+
 ## 📜 License
 
 MIT — see [LICENSE](./LICENSE).
@@ -209,4 +247,13 @@ Bundled data attributions:
 
 - **PBDB** data: CC-BY 4.0 (https://paleobiodb.org)
 - **CrossRef** metadata: CC-BY 4.0 (https://www.crossref.org)
+- **Semantic Scholar** metadata: ODC-BY 1.0 (https://www.semanticscholar.org)
+- **arXiv** metadata: CC0 (https://arxiv.org)
+- **NCBI Taxonomy**: Public domain (https://www.ncbi.nlm.nih.gov/taxonomy)
+- **Wikidata**: CC0 (https://www.wikidata.org)
+- **Macrostrat**: CC-BY 4.0 (https://macrostrat.org)
 - **ICS** chart: International Commission on Stratigraphy (https://stratigraphy.org)
+
+The morphometric landmark extractor is inspired by the **DeepMorph** algorithm
+by Xiaokang Liu (China University of Geosciences, Wuhan).
+

@@ -21,7 +21,7 @@ if _SHARED not in sys.path:
 
 from paleo_common import print_json  # noqa: E402
 
-UA = "Paleontology-Research-Skills/1.0 (mailto:noreply@example.org)"
+UA = "Paleontology-Research-Skills/1.0 (https://github.com/syxscott/Paleontology-Research-Skills; mailto:syxemail@yeah.net)"
 SENT_RE = re.compile(r"(?<=[.!?])\s+(?=[A-Z])")
 KEYWORDS = {
     "we", "show", "report", "describe", "demonstrate", "find", "found",

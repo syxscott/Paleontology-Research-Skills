@@ -30,7 +30,7 @@ if _SHARED not in sys.path:
 from paleo_common import print_json  # noqa: E402
 
 ARXIV_API = "http://export.arxiv.org/api/query"
-UA = "Paleontology-Research-Skills/1.0 (mailto:noreply@example.org)"
+UA = "Paleontology-Research-Skills/1.0 (https://github.com/syxscott/Paleontology-Research-Skills; mailto:syxemail@yeah.net)"
 TIMEOUT = 30
 
 NS = {

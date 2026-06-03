@@ -1,0 +1,13 @@
+# Development dependencies
+# Install with:  pip install -r requirements-dev.txt
+
+# Test runner (the unit tests use stdlib unittest; pytest is for coverage)
+pytest>=7.0
+pytest-cov>=4.0
+
+# Optional: lint / format
+ruff>=0.4
+
+# Optional extras of the project itself (so dev environment has them all)
+Pillow>=10.0
+openpyxl>=3.0

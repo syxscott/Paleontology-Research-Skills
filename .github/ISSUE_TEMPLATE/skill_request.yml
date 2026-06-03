@@ -1,0 +1,48 @@
+name: 🦕 New sub-skill proposal
+description: Propose a new sub-skill (e.g. paleo-isotope, paleo-amber, paleo-trace).
+title: "[skill] paleo-<name>: "
+labels: ["enhancement", "new-skill"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Proposed skill name
+      placeholder: "paleo-isotope"
+      description: Must be lowercase, hyphenated, ≤64 chars (Agent Skills spec).
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: One-paragraph description
+      description: Use the exact tone of an existing SKILL.md (≤1024 chars).
+      placeholder: |
+        🧪 Compute stable-isotope ratios (δ13C, δ18O, δ15N) from paired
+        substrate/standard measurements. Use when the user asks ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: triggers
+    attributes:
+      label: When should Claude trigger this skill?
+      placeholder: |
+        - "Calculate δ13C from these CO2 measurements"
+        - "Compare oxygen isotopes between samples X and Y"
+        - ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: data_source
+    attributes:
+      label: Primary data source / API
+      description: e.g. a public REST API, a bundled JSON dataset, or pure calculation
+    validations:
+      required: true
+
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: When NOT to use this skill

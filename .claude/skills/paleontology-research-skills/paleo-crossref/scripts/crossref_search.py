@@ -19,8 +19,8 @@ if _SHARED not in sys.path:
 from paleo_common import load_profile, print_json  # noqa: E402
 
 CR_URL = "https://api.crossref.org/works"
-UA = "Paleontology-Research-Skills/1.0 (https://paleontology-research-skills.local; mailto:noreply@example.org)"
-DEFAULT_TIMEOUT = 30
+UA = "Paleontology-Research-Skills/1.0 (https://github.com/syxscott/Paleontology-Research-Skills; mailto:syxemail@yeah.net)"
+TIMEOUT = 30
 
 _JATS_RE = re.compile(r"</?(jats:)?[a-zA-Z][^>]*>")
 _WS_RE = re.compile(r"\s+")
@@ -90,7 +90,7 @@ def main(argv=None):
     url = f"{CR_URL}?{qs}"
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
     try:
-        with urllib.request.urlopen(req, timeout=DEFAULT_TIMEOUT) as resp:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
             data = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         print_json({"error": f"HTTP {e.code}: {e.reason}", "url": url, "items": []})

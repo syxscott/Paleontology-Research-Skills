@@ -1,0 +1,9 @@
+# Core runtime dependencies — none for the base toolkit
+# Everything in paleontology-research-skills uses Python 3.9+ stdlib only
+# EXCEPT the optional sub-skills below.
+#
+# Install optional extras for the morphometric sub-skills:
+#   pip install Pillow openpyxl
+#
+# Or install the package (with extras) via:
+#   pip install -e ".[morphometric]"
