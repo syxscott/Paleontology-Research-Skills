@@ -1,0 +1,79 @@
+{
+  "version": "2023-09",
+  "source": "International Commission on Stratigraphy (ICS) — https://stratigraphy.org",
+  "note": "Lightweight period-only table for fast 'period name → age range' lookups. For the full multi-rank table use ../geo-time/data/ics_timescale.json.",
+  "periods": [
+    {
+      "name": "Quaternary",
+      "startMa": 2.58,
+      "endMa": 0.0,
+      "era": "Cenozoic"
+    },
+    {
+      "name": "Neogene",
+      "startMa": 23.03,
+      "endMa": 2.58,
+      "era": "Cenozoic"
+    },
+    {
+      "name": "Paleogene",
+      "startMa": 66.0,
+      "endMa": 23.03,
+      "era": "Cenozoic"
+    },
+    {
+      "name": "Cretaceous",
+      "startMa": 145.0,
+      "endMa": 66.0,
+      "era": "Mesozoic"
+    },
+    {
+      "name": "Jurassic",
+      "startMa": 201.4,
+      "endMa": 145.0,
+      "era": "Mesozoic"
+    },
+    {
+      "name": "Triassic",
+      "startMa": 251.902,
+      "endMa": 201.4,
+      "era": "Mesozoic"
+    },
+    {
+      "name": "Permian",
+      "startMa": 298.9,
+      "endMa": 251.902,
+      "era": "Paleozoic"
+    },
+    {
+      "name": "Carboniferous",
+      "startMa": 358.9,
+      "endMa": 298.9,
+      "era": "Paleozoic"
+    },
+    {
+      "name": "Devonian",
+      "startMa": 419.2,
+      "endMa": 358.9,
+      "era": "Paleozoic"
+    },
+    {
+      "name": "Silurian",
+      "startMa": 443.8,
+      "endMa": 419.2,
+      "era": "Paleozoic"
+    },
+    {
+      "name": "Ordovician",
+      "startMa": 485.4,
+      "endMa": 443.8,
+      "era": "Paleozoic"
+    },
+    {
+      "name": "Cambrian",
+      "startMa": 538.8,
+      "endMa": 485.4,
+      "era": "Paleozoic"
+    }
+  ]
+}

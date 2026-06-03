@@ -1,0 +1,23 @@
+{
+  "taxonStopwords": [
+    "Use", "Find", "Show", "List", "Get", "Query", "Search", "Look",
+    "Check", "Give", "Tell", "What", "Which", "Where", "When", "Who", "How",
+    "I", "We", "You", "They", "The", "This", "That", "These", "Those",
+    "A", "An", "And", "Or", "But", "For", "With", "Without", "From", "Into",
+    "Can", "Could", "Should", "Would", "May", "Might", "Must", "Will", "Shall",
+    "Need", "Want", "Have", "Has", "Had", "Do", "Does", "Did", "Is", "Are",
+    "Was", "Were", "Be", "Been", "Being", "Let", "Please", "About", "Above",
+    "After", "Below", "Under", "Over", "Between", "Among", "During", "Before",
+    "Open", "Close", "Start", "Stop", "Run", "Build", "Make", "Create",
+    "Now", "Then", "Here", "There", "All", "Any", "Some", "No", "Not",
+    "My", "Your", "His", "Her", "Its", "Our", "Their", "More", "Most",
+    "Other", "Such", "Same", "Own", "Just", "Only", "Also", "Very", "Too"
+  ],
+  "geologicalPeriods": [
+    "Cambrian", "Ordovician", "Silurian", "Devonian", "Carboniferous",
+    "Permian", "Triassic", "Jurassic", "Cretaceous",
+    "Paleogene", "Neogene", "Quaternary",
+    "Paleocene", "Eocene", "Oligocene", "Miocene", "Pliocene",
+    "Pleistocene", "Holocene"
+  ]
+}
