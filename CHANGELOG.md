@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `convert.py`: malformed JSON input no longer crashes with a traceback —
+  returns a structured error instead (was a silent empty result).
+- `convert.py`: legacy `.xls` files are explicitly rejected with a clear
+  message ("convert to .xlsx first") instead of crashing inside openpyxl.
+- `memory_archive.py`: entries with timezone-naive timestamps no longer crash
+  with `TypeError: can't compare offset-naive and offset-aware datetimes`.
+- `session_list.py`: sessions mixing naive and aware `started_at` values no
+  longer crash when sorted.
+- Slash commands (`commands/paleo*.md`): now resolve the toolkit root at
+  runtime, supporting both user-level (`~/.claude/skills/`) and project-level
+  (`.claude/skills/`) installs. Previously they only worked with a
+  project-level install.
+- `taxonomy.py`: common scientific nouns ("Fossil", "Dinosaur", "Mammal",
+  …) are no longer mis-detected as taxon names; the stopword / geological
+  period lists are now loaded from the bundled JSON data files (authoritative)
+  with built-in fallbacks.
+- `geo_time_query.py`: `--rank` help no longer advertises `stage`/`age`
+  (the bundled ICS data only contains eonothem/era/period/epoch).
+- `ics_timescale.json`: fixed the misspelled `eonotheMs` top-level key
+  (`eonothems`).
+- `wikidata_taxonomy.py`: SPARQL string literals now escape backslashes and
+  newlines (previously only double quotes).
+- `crossref_search.py`: date-parts with `null` entries no longer render as
+  `"2020-None-None"`.
+- CI: `lint.yml` now actually fails on ruff violations (removed `|| true`);
+  `validate-skills.yml` command-frontmatter check no longer silently passes
+  files without frontmatter.
+- Code style: whole-tree `ruff check` and `ruff format` now pass cleanly
+  (E701/E702 compact-style rules explicitly allowed in `pyproject.toml`).
+
+### Added
+
+- Regression tests: `tests/test_memory_archive.py` (timestamp handling),
+  `tests/test_convert_robustness.py` (malformed input handling),
+  `tests/test_session_list.py` (mixed naive/aware timestamps),
+  common-noun rejection tests in `tests/test_taxonomy.py` (38 → 51 tests).
+
 ## [1.0.0] — 2026-06-03
 
 ### Added

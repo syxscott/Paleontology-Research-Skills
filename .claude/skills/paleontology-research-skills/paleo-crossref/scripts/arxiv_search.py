@@ -11,6 +11,7 @@ Categories of interest:
 Note: arXiv has limited paleontology coverage. For most paleo work,
 prefer CrossRef (`crossref_search.py`) or check bioRxiv / EarthArXiv directly.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -98,11 +99,11 @@ def _parse_entry(entry):
 def main(argv=None):
     p = argparse.ArgumentParser(description="Search arXiv for paleontology / geosciences preprints")
     p.add_argument("--query", required=True)
-    p.add_argument("--category", default=None,
-                   help="Restrict to one arXiv category (e.g. q-bio.PE, physics.geo-ph)")
+    p.add_argument(
+        "--category", default=None, help="Restrict to one arXiv category (e.g. q-bio.PE, physics.geo-ph)"
+    )
     p.add_argument("--max-results", type=int, default=10)
-    p.add_argument("--sort", choices=["relevance", "submittedDate", "lastUpdatedDate"],
-                   default="relevance")
+    p.add_argument("--sort", choices=["relevance", "submittedDate", "lastUpdatedDate"], default="relevance")
     p.add_argument("--order", choices=["ascending", "descending"], default="descending")
     p.add_argument("--include-abstract", action="store_true")
     args = p.parse_args(argv)
@@ -138,14 +139,16 @@ def main(argv=None):
             it.pop("abstract", None)
 
     total = _txt(root, "{http://a9.com/-/spec/opensearch/1.1/}totalResults")
-    print_json({
-        "source": "arXiv",
-        "query": args.query,
-        "category": args.category,
-        "total_results": int(total) if total.isdigit() else None,
-        "count": len(items),
-        "items": items,
-    })
+    print_json(
+        {
+            "source": "arXiv",
+            "query": args.query,
+            "category": args.category,
+            "total_results": int(total) if total.isdigit() else None,
+            "count": len(items),
+            "items": items,
+        }
+    )
 
 
 if __name__ == "__main__":

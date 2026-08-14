@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Overlay landmarks on the original image as an annotated PNG."""
+
 from __future__ import annotations
 
 import argparse
@@ -17,6 +18,7 @@ from paleo_common import print_json  # noqa: E402
 
 try:
     from PIL import Image, ImageDraw, ImageFont
+
     _PIL_OK = True
 except ImportError:
     _PIL_OK = False
@@ -40,8 +42,7 @@ def _load_landmarks(landmarks_arg):
 def main(argv=None):
     p = argparse.ArgumentParser(description="Overlay landmarks on an image")
     p.add_argument("--image", required=True)
-    p.add_argument("--landmarks", required=True,
-                   help="Path to landmarks JSON (from extract_landmarks.py)")
+    p.add_argument("--landmarks", required=True, help="Path to landmarks JSON (from extract_landmarks.py)")
     p.add_argument("--out", required=True, help="Output annotated PNG")
     p.add_argument("--point-size", type=int, default=4)
     p.add_argument("--point-color", default="#FF0000")
@@ -49,8 +50,7 @@ def main(argv=None):
     p.add_argument("--number-color", default="#FFFFFF")
     p.add_argument("--show-numbers", action="store_true")
     p.add_argument("--show-connections", action="store_true")
-    p.add_argument("--image-opacity", type=float, default=0.7,
-                   help="0.0..1.0; lower = landmarks pop more")
+    p.add_argument("--image-opacity", type=float, default=0.7, help="0.0..1.0; lower = landmarks pop more")
     args = p.parse_args(argv)
 
     if not _PIL_OK:
@@ -99,20 +99,21 @@ def main(argv=None):
         except OSError:
             font = None
         for i, (x, y) in enumerate(pts):
-            draw.text((x + r + 1, y - r - 8), str(i + 1),
-                      fill=args.number_color, font=font)
+            draw.text((x + r + 1, y - r - 8), str(i + 1), fill=args.number_color, font=font)
 
     out = Image.alpha_composite(base, overlay)
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     out.convert("RGB").save(args.out)
 
-    print_json({
-        "input_image": str(img_path),
-        "landmarks_count": len(pts),
-        "output": str(args.out),
-        "show_numbers": args.show_numbers,
-        "show_connections": args.show_connections,
-    })
+    print_json(
+        {
+            "input_image": str(img_path),
+            "landmarks_count": len(pts),
+            "output": str(args.out),
+            "show_numbers": args.show_numbers,
+            "show_connections": args.show_connections,
+        }
+    )
 
 
 if __name__ == "__main__":

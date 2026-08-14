@@ -197,6 +197,10 @@ edit `user.md` to set your role, institution, preferred periods, language.
 
 ## 🧪 Smoke test
 
+> **Windows note**: the `python3` command is not always available on Windows
+> (the installer typically provides `python` or `py`). If `python3` is not
+> found, replace it with `python` (or `py -3`) in the commands below.
+
 ```bash
 # All scripts respond to --help without imports failing
 python3 .claude/skills/paleontology-research-skills/paleo-pbdb/scripts/pbdb_query.py --help

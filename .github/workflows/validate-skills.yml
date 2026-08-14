@@ -63,7 +63,9 @@ jobs:
           all_ok = True
           for md in sorted(pathlib.Path(".claude/commands").glob("*.md")):
               text = md.read_text(encoding="utf-8")
-              if "description:" not in text.split("---", 2)[1] if "---" in text else "":
+              fm = text.split("---", 2)
+              has_fm = len(fm) >= 3 and "description:" in fm[1]
+              if not has_fm:
                   print(f"::error file={md}::missing description in frontmatter")
                   all_ok = False
               else:

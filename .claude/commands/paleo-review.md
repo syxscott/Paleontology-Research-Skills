@@ -3,6 +3,17 @@ description: Generate a comprehensive literature-review report on a topic / taxo
 argument-hint: <topic> [taxon=...] [formation=...]
 allowed-tools: Bash, Read
 ---
+Before running any script, resolve the toolkit root (supports both
+**user-level** install at `~/.claude/skills/` and **project-level** install at
+`.claude/skills/`):
+
+```bash
+if [ -d "$HOME/.claude/skills/paleontology-research-skills" ]; then
+  PRS="$HOME/.claude/skills/paleontology-research-skills"
+else
+  PRS=".claude/skills/paleontology-research-skills"
+fi
+```
 
 The user wants a comprehensive paleontology literature review. Use the
 **paleo-research-assistant** orchestrator:
@@ -15,7 +26,7 @@ Procedure:
    mentioned, pass them as `--taxon` / `--formation`.
 2. Run the full pipeline:
    ```bash
-   python3 .claude/skills/paleontology-research-skills/paleo-research-assistant/scripts/research_assistant.py \
+   python3 "$PRS"/paleo-research-assistant/scripts/research_assistant.py \
        --topic "<TOPIC>" \
        [--taxon "<TAXON>"] \
        [--formation "<FORMATION>"] \

@@ -28,6 +28,9 @@ _build/
 .paleontology-research-skills/
 *.paleontology-research-skills_home/
 
+# WorkBuddy local workspace data (memory, task state) — not part of the repo
+.workbuddy/
+
 # Logs
 *.log
 

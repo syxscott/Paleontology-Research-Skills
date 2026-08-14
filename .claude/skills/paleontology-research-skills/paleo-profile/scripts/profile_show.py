@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Show the parsed profile in full (JSON or pretty)."""
+
 from __future__ import annotations
 
 import argparse
@@ -11,7 +12,7 @@ _SHARED = os.path.normpath(os.path.join(_HERE, "..", "..", "scripts"))
 if _SHARED not in sys.path:
     sys.path.insert(0, _SHARED)
 
-from paleo_common import load_profile, data_home, profile_files, print_json  # noqa: E402
+from paleo_common import data_home, load_profile, print_json, profile_files  # noqa: E402
 
 
 def _pretty(prof):
@@ -33,9 +34,11 @@ def _pretty(prof):
     lines.append(f"  regions:     {', '.join(rf.get('preferredRegions') or []) or '(none)'}")
     lines.append(f"  language:    {u.get('outputLanguage')}  (preferred: {u.get('languagePreference')})")
     dp = u.get("dataPreferences", {})
-    lines.append(f"  data prefs:  limit={dp.get('defaultOccurrenceLimit')} "
-                 f"preprints={dp.get('includePreprints')} OA={dp.get('preferOpenAccess')} "
-                 f"cite={dp.get('citationFormat')}")
+    lines.append(
+        f"  data prefs:  limit={dp.get('defaultOccurrenceLimit')} "
+        f"preprints={dp.get('includePreprints')} OA={dp.get('preferOpenAccess')} "
+        f"cite={dp.get('citationFormat')}"
+    )
     lines.append("")
     lines.append("[Soul]")
     lines.append(f"  mission:     {s.get('mission')}")

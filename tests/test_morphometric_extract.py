@@ -2,8 +2,7 @@
 
 These tests require Pillow. They are skipped if Pillow is not installed.
 """
-import json
-import os
+
 import sys
 import tempfile
 import unittest
@@ -11,12 +10,15 @@ from pathlib import Path
 
 try:
     from PIL import Image, ImageDraw
+
     _PIL_OK = True
 except ImportError:
     _PIL_OK = False
 
 _HERE = Path(__file__).resolve().parent
-_SCRIPT_DIR = _HERE.parent / ".claude" / "skills" / "paleontology-research-skills" / "paleo-morphometric" / "scripts"
+_SCRIPT_DIR = (
+    _HERE.parent / ".claude" / "skills" / "paleontology-research-skills" / "paleo-morphometric" / "scripts"
+)
 sys.path.insert(0, str(_SCRIPT_DIR))
 sys.path.insert(0, str(_HERE.parent / ".claude" / "skills" / "paleontology-research-skills" / "scripts"))
 
@@ -25,7 +27,6 @@ import extract_landmarks  # noqa: E402
 
 @unittest.skipUnless(_PIL_OK, "Pillow not installed")
 class TestExtract(unittest.TestCase):
-
     def _make_ellipse(self, w=300, h=200, threshold=150):
         with tempfile.TemporaryDirectory() as td:
             img_path = Path(td) / "ellipse.png"

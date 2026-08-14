@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Query the bundled ICS geological time scale."""
+
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import sys
 
@@ -50,8 +50,9 @@ def _normalise(d):
 
 def _by_name(intervals, name):
     n = name.lower().strip()
-    return [_normalise(d) for d in intervals
-            if (d.get("name", "").lower() == n) or (d.get("id", "").lower() == n)]
+    return [
+        _normalise(d) for d in intervals if (d.get("name", "").lower() == n) or (d.get("id", "").lower() == n)
+    ]
 
 
 def _by_age(intervals, age):
@@ -99,7 +100,7 @@ def main(argv=None):
     p.add_argument("--period", help="Named interval to look up (any rank)")
     p.add_argument("--age", type=float, help="Find intervals that contain this age (Ma)")
     p.add_argument("--list", action="store_true", help="List intervals")
-    p.add_argument("--rank", help="Filter list by rank (eonothem/era/period/epoch/age/stage)")
+    p.add_argument("--rank", help="Filter list by rank (eonothem/era/period/epoch)")
     p.add_argument("--parent", help="Filter list by parent interval name")
     args = p.parse_args(argv)
 
@@ -110,24 +111,33 @@ def main(argv=None):
 
     if args.period:
         matches = _by_name(intervals, args.period)
-        print_json({"query": {"period": args.period}, "matches": matches,
-                    "source": (raw or {}).get("source")})
+        print_json(
+            {"query": {"period": args.period}, "matches": matches, "source": (raw or {}).get("source")}
+        )
         return
     if args.age is not None:
         matches = _by_age(intervals, args.age)
-        print_json({"query": {"age": args.age}, "matches": matches,
-                    "source": (raw or {}).get("source")})
+        print_json({"query": {"age": args.age}, "matches": matches, "source": (raw or {}).get("source")})
         return
     if args.list:
         matches = _list(intervals, args.rank, args.parent)
-        print_json({"query": {"list": True, "rank": args.rank, "parent": args.parent},
-                    "count": len(matches), "matches": matches,
-                    "source": (raw or {}).get("source")})
+        print_json(
+            {
+                "query": {"list": True, "rank": args.rank, "parent": args.parent},
+                "count": len(matches),
+                "matches": matches,
+                "source": (raw or {}).get("source"),
+            }
+        )
         return
 
-    print_json({"error": "Provide --period, --age, or --list",
-                "version": (raw or {}).get("version"),
-                "totalIntervals": len(intervals)})
+    print_json(
+        {
+            "error": "Provide --period, --age, or --list",
+            "version": (raw or {}).get("version"),
+            "totalIntervals": len(intervals),
+        }
+    )
 
 
 if __name__ == "__main__":

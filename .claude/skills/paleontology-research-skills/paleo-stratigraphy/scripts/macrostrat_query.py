@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Query the Macrostrat API for stratigraphic unit data (lithology, columns)."""
+
 from __future__ import annotations
 
 import argparse
@@ -62,29 +63,33 @@ def main(argv=None):
     units = ((data or {}).get("success") or {}).get("data") or []
     out_units = []
     for u in units:
-        out_units.append({
-            "unit_id": u.get("unit_id"),
-            "strat_name": u.get("strat_name"),
-            "Mbr": u.get("Mbr"),
-            "Fm": u.get("Fm"),
-            "Gp": u.get("Gp"),
-            "Sgp": u.get("Sgp"),
-            "max_age_ma": u.get("b_age"),
-            "min_age_ma": u.get("t_age"),
-            "lithology": u.get("lith") or u.get("lith_class"),
-            "environment": u.get("environ") or u.get("environ_class"),
-            "color": u.get("color"),
-            "col_id": u.get("col_id"),
-            "max_thick_m": u.get("max_thick"),
-            "min_thick_m": u.get("min_thick"),
-        })
+        out_units.append(
+            {
+                "unit_id": u.get("unit_id"),
+                "strat_name": u.get("strat_name"),
+                "Mbr": u.get("Mbr"),
+                "Fm": u.get("Fm"),
+                "Gp": u.get("Gp"),
+                "Sgp": u.get("Sgp"),
+                "max_age_ma": u.get("b_age"),
+                "min_age_ma": u.get("t_age"),
+                "lithology": u.get("lith") or u.get("lith_class"),
+                "environment": u.get("environ") or u.get("environ_class"),
+                "color": u.get("color"),
+                "col_id": u.get("col_id"),
+                "max_thick_m": u.get("max_thick"),
+                "min_thick_m": u.get("min_thick"),
+            }
+        )
 
-    print_json({
-        "source": "Macrostrat",
-        "query": {"formation": args.formation, "unit_id": args.unit_id},
-        "count": len(out_units),
-        "units": out_units,
-    })
+    print_json(
+        {
+            "source": "Macrostrat",
+            "query": {"formation": args.formation, "unit_id": args.unit_id},
+            "count": len(out_units),
+            "units": out_units,
+        }
+    )
 
 
 if __name__ == "__main__":

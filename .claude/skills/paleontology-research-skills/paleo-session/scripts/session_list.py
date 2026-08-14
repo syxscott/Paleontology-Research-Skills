@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """List recent session files from ~/.paleontology-research-skills/sessions/."""
+
 from __future__ import annotations
 
 import argparse
@@ -12,14 +13,17 @@ _SHARED = os.path.normpath(os.path.join(_HERE, "..", "..", "scripts"))
 if _SHARED not in sys.path:
     sys.path.insert(0, _SHARED)
 
-from paleo_common import sessions_root, read_json, print_json  # noqa: E402
+from paleo_common import print_json, read_json, sessions_root  # noqa: E402
 
 
 def _ts(session, path):
     raw = session.get("ended_at") or session.get("started_at")
     if isinstance(raw, str):
         try:
-            return dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            ts = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            if ts.tzinfo is None:
+                ts = ts.replace(tzinfo=dt.timezone.utc)
+            return ts
         except ValueError:
             pass
     try:
@@ -32,8 +36,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description="List recent Paleontology Research Skills sessions")
     p.add_argument("--limit", type=int, default=20)
     p.add_argument("--since-days", type=int, default=None)
-    p.add_argument("--tag", action="append", default=[],
-                   help="Filter to sessions whose topic_tags include this tag (can repeat)")
+    p.add_argument(
+        "--tag",
+        action="append",
+        default=[],
+        help="Filter to sessions whose topic_tags include this tag (can repeat)",
+    )
     args = p.parse_args(argv)
 
     root = sessions_root()
@@ -61,16 +69,18 @@ def main(argv=None):
 
     sessions = []
     for ts, s, f in items:
-        sessions.append({
-            "session_id": s.get("session_id") or f.stem,
-            "title": s.get("title"),
-            "started_at": s.get("started_at"),
-            "ended_at": s.get("ended_at") or ts.isoformat(),
-            "topic_tags": s.get("topic_tags") or [],
-            "turn_count": len(s.get("turns") or []),
-            "summary": (s.get("summary") or "")[:240],
-            "file": str(f),
-        })
+        sessions.append(
+            {
+                "session_id": s.get("session_id") or f.stem,
+                "title": s.get("title"),
+                "started_at": s.get("started_at"),
+                "ended_at": s.get("ended_at") or ts.isoformat(),
+                "topic_tags": s.get("topic_tags") or [],
+                "turn_count": len(s.get("turns") or []),
+                "summary": (s.get("summary") or "")[:240],
+                "file": str(f),
+            }
+        )
     print_json({"count": len(sessions), "sessions": sessions, "sessionsRoot": str(root)})
 
 

@@ -54,7 +54,8 @@ Sub-skill scripts can import shared utilities from the parent directory:
 
 ```python
 import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'scripts'))
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "scripts"))
 from paleo_common import load_profile, normalize_taxon, data_home
 ```
 

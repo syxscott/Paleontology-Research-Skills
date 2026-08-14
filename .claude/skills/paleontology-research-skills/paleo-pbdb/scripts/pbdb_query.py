@@ -6,6 +6,7 @@ the parsed user profile (`~/.paleontology-research-skills/user.md`).
 
 Output: JSON object on stdout with a ``records`` array of trimmed PBDB entries.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -71,14 +72,16 @@ def main(argv=None):
     p = argparse.ArgumentParser(description="Query PBDB for fossil occurrences")
     p.add_argument("--genus")
     p.add_argument("--species")
-    p.add_argument("--base-name", dest="base_name",
-                   help="Higher taxon (overrides genus/species), e.g. Allosaurus")
+    p.add_argument(
+        "--base-name", dest="base_name", help="Higher taxon (overrides genus/species), e.g. Allosaurus"
+    )
     p.add_argument("--interval", help="Geological interval, e.g. Late Jurassic")
     p.add_argument("--min-ma", type=float, dest="min_ma")
     p.add_argument("--max-ma", type=float, dest="max_ma")
     p.add_argument("--limit", type=int, default=20)
-    p.add_argument("--respect-profile", action="store_true",
-                   help="Apply user profile defaults (occurrence limit, etc.)")
+    p.add_argument(
+        "--respect-profile", action="store_true", help="Apply user profile defaults (occurrence limit, etc.)"
+    )
     p.add_argument("--prompt", help="Natural-language prompt; taxon will be extracted")
     args = p.parse_args(argv)
 
@@ -93,8 +96,9 @@ def main(argv=None):
             args.base_name = candidate
 
     if not any([args.base_name, args.genus, args.species, args.interval]):
-        print_json({"error": "Provide at least one of --base-name / --genus / --species / --interval",
-                    "records": []})
+        print_json(
+            {"error": "Provide at least one of --base-name / --genus / --species / --interval", "records": []}
+        )
         return
 
     limit = max(1, min(int(args.limit or 20), 200))
@@ -118,12 +122,14 @@ def main(argv=None):
         return
 
     records = [_normalize(r) for r in (data.get("records") or [])]
-    print_json({
-        "source": "PBDB",
-        "query": params,
-        "count": len(records),
-        "records": records,
-    })
+    print_json(
+        {
+            "source": "PBDB",
+            "query": params,
+            "count": len(records),
+            "records": records,
+        }
+    )
 
 
 if __name__ == "__main__":

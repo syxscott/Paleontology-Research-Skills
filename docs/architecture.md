@@ -33,6 +33,7 @@ All sub-skill scripts use the **same idiom** to import shared utilities:
 
 ```python
 import os, sys
+
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _SHARED = os.path.normpath(os.path.join(_HERE, "..", "..", "scripts"))
 if _SHARED not in sys.path:

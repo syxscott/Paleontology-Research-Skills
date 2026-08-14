@@ -4,6 +4,7 @@
 Calls extract_landmarks.py on each file, then optionally writes a
 multi-specimen TPS file aggregating all results.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -66,8 +67,7 @@ def _aggregate_csv(json_files, out_path):
             continue
         sid = payload["specimen_id"]
         for lm in payload.get("landmarks") or []:
-            rows.append(f"{sid},{lm['id']},{lm['x']:.4f},{lm['y']:.4f},"
-                        f"{lm['type']},{lm['name']}")
+            rows.append(f"{sid},{lm['id']},{lm['x']:.4f},{lm['y']:.4f},{lm['type']},{lm['name']}")
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     Path(out_path).write_text("\n".join(rows) + "\n", encoding="utf-8")
 
@@ -101,17 +101,16 @@ def main(argv=None):
     p.add_argument("--out-dir", default="morphometric_output")
     p.add_argument("--num-landmarks", type=int, default=64)
     p.add_argument("--threshold", type=int, default=150)
-    p.add_argument("--formats", default="json,tps,csv",
-                   help="Per-specimen formats: json,tps,csv,xlsx")
-    p.add_argument("--aggregate", default="tps,csv",
-                   help="Aggregated formats: tps (multi-specimen TPS), csv, xlsx")
+    p.add_argument("--formats", default="json,tps,csv", help="Per-specimen formats: json,tps,csv,xlsx")
+    p.add_argument(
+        "--aggregate", default="tps,csv", help="Aggregated formats: tps (multi-specimen TPS), csv, xlsx"
+    )
     p.add_argument("--scale", type=float, default=1.0)
     args = p.parse_args(argv)
 
     images = _list_images(args.image_dir)
     if not images:
-        print_json({"error": f"No images found in {args.image_dir}",
-                    "supported_exts": list(DEFAULT_EXTS)})
+        print_json({"error": f"No images found in {args.image_dir}", "supported_exts": list(DEFAULT_EXTS)})
         return
 
     results = []
@@ -121,13 +120,20 @@ def main(argv=None):
 
     for img in images:
         cmd = [
-            sys.executable, str(EXTRACT_SCRIPT),
-            "--image", str(img),
-            "--num-landmarks", str(args.num_landmarks),
-            "--threshold", str(args.threshold),
-            "--out-dir", str(per_specimen_dir),
-            "--formats", args.formats,
-            "--scale", str(args.scale),
+            sys.executable,
+            str(EXTRACT_SCRIPT),
+            "--image",
+            str(img),
+            "--num-landmarks",
+            str(args.num_landmarks),
+            "--threshold",
+            str(args.threshold),
+            "--out-dir",
+            str(per_specimen_dir),
+            "--formats",
+            args.formats,
+            "--scale",
+            str(args.scale),
         ]
         # IMPORTANT on Windows: force UTF-8 for subprocess pipes,
         # otherwise CJK paths/text in stdout will hit GBK and crash.
@@ -177,16 +183,18 @@ def main(argv=None):
             ok = _aggregate_excel(json_files, xl)
             agg_written["xlsx"] = str(xl) if ok else "openpyxl not installed"
 
-    print_json({
-        "image_dir": args.image_dir,
-        "out_dir": args.out_dir,
-        "total_images": len(images),
-        "successful": sum(1 for r in results if r.get("ok")),
-        "aggregated_files": agg_written,
-        "per_specimen_dir": str(per_specimen_dir),
-        "timestamp": dt.datetime.now(tz=dt.timezone.utc).isoformat(),
-        "results_preview": results[:3],
-    })
+    print_json(
+        {
+            "image_dir": args.image_dir,
+            "out_dir": args.out_dir,
+            "total_images": len(images),
+            "successful": sum(1 for r in results if r.get("ok")),
+            "aggregated_files": agg_written,
+            "per_specimen_dir": str(per_specimen_dir),
+            "timestamp": dt.datetime.now(tz=dt.timezone.utc).isoformat(),
+            "results_preview": results[:3],
+        }
+    )
 
 
 if __name__ == "__main__":

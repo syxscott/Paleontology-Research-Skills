@@ -1,17 +1,19 @@
 """Smoke tests for paleo_common shared utilities."""
+
 import os
 import sys
 import unittest
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
-_SHARED = os.path.normpath(os.path.join(_HERE, "..", ".claude", "skills", "paleontology-research-skills", "scripts"))
+_SHARED = os.path.normpath(
+    os.path.join(_HERE, "..", ".claude", "skills", "paleontology-research-skills", "scripts")
+)
 sys.path.insert(0, _SHARED)
 
 import paleo_common as pc  # noqa: E402
 
 
 class TestPaleoCommon(unittest.TestCase):
-
     def test_data_home_returns_path(self):
         self.assertTrue(str(pc.data_home()))
 

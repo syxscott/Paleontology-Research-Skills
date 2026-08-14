@@ -3,6 +3,7 @@
 
 Input: --abstract text, OR pipe via stdin, OR --doi to fetch via CrossRef.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -24,10 +25,30 @@ from paleo_common import print_json  # noqa: E402
 UA = "Paleontology-Research-Skills/1.0 (https://github.com/syxscott/Paleontology-Research-Skills; mailto:syxemail@yeah.net)"
 SENT_RE = re.compile(r"(?<=[.!?])\s+(?=[A-Z])")
 KEYWORDS = {
-    "we", "show", "report", "describe", "demonstrate", "find", "found",
-    "discover", "evidence", "conclude", "suggest", "imply", "novel", "first",
-    "specimen", "fossil", "phylogen", "stratigraph", "age", "ma",
-    "morpholog", "tax", "clade", "diversity",
+    "we",
+    "show",
+    "report",
+    "describe",
+    "demonstrate",
+    "find",
+    "found",
+    "discover",
+    "evidence",
+    "conclude",
+    "suggest",
+    "imply",
+    "novel",
+    "first",
+    "specimen",
+    "fossil",
+    "phylogen",
+    "stratigraph",
+    "age",
+    "ma",
+    "morpholog",
+    "tax",
+    "clade",
+    "diversity",
 }
 
 

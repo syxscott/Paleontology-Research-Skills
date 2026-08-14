@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Convert morphometric landmark data between TPS / NTSys / CSV / JSON / Excel."""
+
 from __future__ import annotations
 
 import argparse
@@ -18,6 +19,7 @@ from paleo_common import print_json  # noqa: E402
 
 # ========== Parsers ==========
 
+
 def _parse_tps(text):
     """Return list of specimen dicts."""
     specimens = []
@@ -33,11 +35,13 @@ def _parse_tps(text):
             if cur and cur["landmarks"]:
                 specimens.append(cur)
             n = int(line.split("=", 1)[1])
-            cur = {"specimen_id": f"specimen_{len(specimens)+1:03d}",
-                   "scale": 1.0,
-                   "image_path": None,
-                   "num_landmarks": n,
-                   "landmarks": []}
+            cur = {
+                "specimen_id": f"specimen_{len(specimens) + 1:03d}",
+                "scale": 1.0,
+                "image_path": None,
+                "num_landmarks": n,
+                "landmarks": [],
+            }
             i += 1
             for k in range(n):
                 if i >= len(lines):
@@ -45,13 +49,20 @@ def _parse_tps(text):
                 parts = re.split(r"[\s,]+", lines[i].strip())
                 if len(parts) >= 2:
                     try:
-                        x = float(parts[0]); y = float(parts[1])
+                        x = float(parts[0])
+                        y = float(parts[1])
                     except ValueError:
-                        i += 1; continue
-                    cur["landmarks"].append({
-                        "id": k + 1, "x": x, "y": y,
-                        "type": "semilandmark", "name": f"LM{k+1:02d}",
-                    })
+                        i += 1
+                        continue
+                    cur["landmarks"].append(
+                        {
+                            "id": k + 1,
+                            "x": x,
+                            "y": y,
+                            "type": "semilandmark",
+                            "name": f"LM{k + 1:02d}",
+                        }
+                    )
                 i += 1
             continue
         if cur is not None:
@@ -72,7 +83,7 @@ def _parse_tps(text):
 
 def _parse_csv(text):
     """Parse long-format CSV: specimen_id,landmark_id,x,y[,type,name]."""
-    lines = [l for l in text.splitlines() if l.strip()]
+    lines = [line for line in text.splitlines() if line.strip()]
     if not lines:
         return []
     header = [h.strip().lower() for h in lines[0].split(",")]
@@ -96,20 +107,35 @@ def _parse_csv(text):
         except ValueError:
             continue
         ent = grouped.setdefault(sid, [])
-        ent.append({
-            "id": lmid, "x": x, "y": y,
-            "type": parts[type_idx] if type_idx is not None and type_idx < len(parts) else "semilandmark",
-            "name": parts[name_idx] if name_idx is not None and name_idx < len(parts) else f"LM{lmid:02d}",
-        })
+        ent.append(
+            {
+                "id": lmid,
+                "x": x,
+                "y": y,
+                "type": parts[type_idx] if type_idx is not None and type_idx < len(parts) else "semilandmark",
+                "name": parts[name_idx]
+                if name_idx is not None and name_idx < len(parts)
+                else f"LM{lmid:02d}",
+            }
+        )
     out = []
     for sid, lms in grouped.items():
         lms.sort(key=lambda x: x["id"])
-        out.append({"specimen_id": sid, "scale": 1.0, "image_path": None,
-                    "num_landmarks": len(lms), "landmarks": lms})
+        out.append(
+            {
+                "specimen_id": sid,
+                "scale": 1.0,
+                "image_path": None,
+                "num_landmarks": len(lms),
+                "landmarks": lms,
+            }
+        )
     return out
 
 
 def _parse_json(text):
+    # Deliberately lets json.JSONDecodeError propagate: _load_one converts it
+    # into a friendly error message instead of a silent empty result.
     data = json.loads(text)
     if isinstance(data, dict) and "landmarks" in data:
         return [data]
@@ -120,7 +146,7 @@ def _parse_json(text):
 
 def _parse_nts(text):
     """NTSys matrix: header `1 N P 0` then N rows of P columns."""
-    lines = [l for l in text.splitlines() if l.strip() and not l.startswith('"')]
+    lines = [line for line in text.splitlines() if line.strip() and not line.startswith('"')]
     if len(lines) < 2:
         return []
     header = re.split(r"\s+", lines[0].strip())
@@ -130,7 +156,7 @@ def _parse_nts(text):
     except (ValueError, IndexError):
         return []
     n_landmarks = n_vars // 2
-    rows = lines[1:1 + n_specimens]
+    rows = lines[1 : 1 + n_specimens]
     specimens = []
     for i, row in enumerate(rows):
         vals = re.split(r"\s+", row.strip())
@@ -141,11 +167,16 @@ def _parse_nts(text):
                 y = float(vals[2 * k + 1])
             except (ValueError, IndexError):
                 break
-            lms.append({"id": k + 1, "x": x, "y": y,
-                        "type": "semilandmark", "name": f"LM{k+1:02d}"})
-        specimens.append({"specimen_id": f"specimen_{i+1:03d}", "scale": 1.0,
-                          "image_path": None, "num_landmarks": len(lms),
-                          "landmarks": lms})
+            lms.append({"id": k + 1, "x": x, "y": y, "type": "semilandmark", "name": f"LM{k + 1:02d}"})
+        specimens.append(
+            {
+                "specimen_id": f"specimen_{i + 1:03d}",
+                "scale": 1.0,
+                "image_path": None,
+                "num_landmarks": len(lms),
+                "landmarks": lms,
+            }
+        )
     return specimens
 
 
@@ -154,18 +185,28 @@ def _parse_xlsx(path):
         from openpyxl import load_workbook
     except ImportError:
         return None, "openpyxl not installed (pip install openpyxl)"
-    wb = load_workbook(path, read_only=True, data_only=True)
+    if Path(path).suffix.lower() == ".xls":
+        return None, (
+            "Legacy .xls format is not supported (openpyxl reads .xlsx only). Convert to .xlsx first."
+        )
+    try:
+        wb = load_workbook(path, read_only=True, data_only=True)
+    except (OSError, ValueError, KeyError) as e:
+        return None, f"Failed to open Excel file {path}: {e}"
+    except Exception as e:  # noqa: BLE001 - openpyxl raises InvalidFileException (not an OSError subclass)
+        return None, f"Failed to open Excel file {path}: {e}"
     ws = wb.active
     rows = list(ws.iter_rows(values_only=True))
     if not rows:
         return [], None
     header = [str(h or "").strip().lower() for h in rows[0]]
-    body = ["," .join("" if v is None else str(v) for v in r) for r in rows[1:]]
+    body = [",".join("" if v is None else str(v) for v in r) for r in rows[1:]]
     csv_text = ",".join(header) + "\n" + "\n".join(body)
     return _parse_csv(csv_text), None
 
 
 # ========== Writers ==========
+
 
 def _write_tps(specimens, out_path):
     lines = []
@@ -187,8 +228,7 @@ def _write_csv(specimens, out_path):
     for s in specimens:
         sid = s["specimen_id"]
         for lm in s["landmarks"]:
-            rows.append(f"{sid},{lm['id']},{lm['x']:.4f},{lm['y']:.4f},"
-                        f"{lm['type']},{lm['name']}")
+            rows.append(f"{sid},{lm['id']},{lm['x']:.4f},{lm['y']:.4f},{lm['type']},{lm['name']}")
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     Path(out_path).write_text("\n".join(rows) + "\n", encoding="utf-8")
 
@@ -196,8 +236,7 @@ def _write_csv(specimens, out_path):
 def _write_json(specimens, out_path):
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     payload = specimens[0] if len(specimens) == 1 else specimens
-    Path(out_path).write_text(json.dumps(payload, ensure_ascii=False, indent=2),
-                              encoding="utf-8")
+    Path(out_path).write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _write_nts(specimens, out_path):
@@ -235,10 +274,14 @@ def _write_xlsx(specimens, out_path):
     return True, None
 
 
-PARSERS = {".tps": _parse_tps, ".csv": _parse_csv, ".json": _parse_json,
-           ".nts": _parse_nts, ".txt": _parse_tps}
-WRITERS = {"tps": _write_tps, "csv": _write_csv, "json": _write_json,
-           "nts": _write_nts}
+PARSERS = {
+    ".tps": _parse_tps,
+    ".csv": _parse_csv,
+    ".json": _parse_json,
+    ".nts": _parse_nts,
+    ".txt": _parse_tps,
+}
+WRITERS = {"tps": _write_tps, "csv": _write_csv, "json": _write_json, "nts": _write_nts}
 
 
 def _load_one(path):
@@ -253,20 +296,21 @@ def _load_one(path):
         text = p.read_text(encoding="utf-8")
     except OSError as e:
         return None, f"Failed to read {p}: {e}"
-    return fn(text), None
+    try:
+        return fn(text), None
+    except (ValueError, KeyError, IndexError, json.JSONDecodeError) as e:
+        return None, f"Failed to parse {p.name}: {e}"
 
 
 def _validate(specimens):
     if not specimens:
-        return {"all_same_count": True, "missing_landmarks": 0,
-                "warnings": ["No specimens"]}
+        return {"all_same_count": True, "missing_landmarks": 0, "warnings": ["No specimens"]}
     counts = [len(s["landmarks"]) for s in specimens]
     same = len(set(counts)) == 1
     warnings = []
     if not same:
         warnings.append(f"Inconsistent landmark counts: {sorted(set(counts))}")
-    missing = sum(1 for s in specimens for lm in s["landmarks"]
-                  if lm["x"] is None or lm["y"] is None)
+    missing = sum(1 for s in specimens for lm in s["landmarks"] if lm["x"] is None or lm["y"] is None)
     return {
         "all_same_count": same,
         "landmark_counts": sorted(set(counts)),
@@ -282,8 +326,7 @@ def main(argv=None):
     p.add_argument("--merge", nargs="+", help="Merge multiple input files")
     p.add_argument("--to", help="Target format: tps, csv, json, nts, xlsx")
     p.add_argument("--out", help="Output path")
-    p.add_argument("--validate", action="store_true",
-                   help="Validate input only, no conversion")
+    p.add_argument("--validate", action="store_true", help="Validate input only, no conversion")
     args = p.parse_args(argv)
 
     inputs = [args.input] if args.input else (args.merge or [])
@@ -304,20 +347,21 @@ def main(argv=None):
     validation = _validate(all_specimens)
 
     if args.validate:
-        print_json({
-            "inputs": inputs,
-            "input_formats": in_formats,
-            "validation": validation,
-            "specimens_preview": [
-                {"specimen_id": s["specimen_id"], "num_landmarks": len(s["landmarks"])}
-                for s in all_specimens[:10]
-            ],
-        })
+        print_json(
+            {
+                "inputs": inputs,
+                "input_formats": in_formats,
+                "validation": validation,
+                "specimens_preview": [
+                    {"specimen_id": s["specimen_id"], "num_landmarks": len(s["landmarks"])}
+                    for s in all_specimens[:10]
+                ],
+            }
+        )
         return
 
     if not args.to or not args.out:
-        print_json({"error": "Provide --to and --out (or use --validate only)",
-                    "validation": validation})
+        print_json({"error": "Provide --to and --out (or use --validate only)", "validation": validation})
         return
 
     fmt = args.to.lower()
@@ -329,19 +373,20 @@ def main(argv=None):
     elif fmt in WRITERS:
         WRITERS[fmt](all_specimens, args.out)
     else:
-        print_json({"error": f"Unsupported output format: {fmt}",
-                    "supported": list(WRITERS) + ["xlsx"]})
+        print_json({"error": f"Unsupported output format: {fmt}", "supported": list(WRITERS) + ["xlsx"]})
         return
 
-    print_json({
-        "inputs": inputs,
-        "input_formats": in_formats,
-        "output_format": fmt,
-        "output_path": args.out,
-        "specimens_count": len(all_specimens),
-        "landmarks_per_specimen": validation.get("landmark_counts"),
-        "validation": validation,
-    })
+    print_json(
+        {
+            "inputs": inputs,
+            "input_formats": in_formats,
+            "output_format": fmt,
+            "output_path": args.out,
+            "specimens_count": len(all_specimens),
+            "landmarks_per_specimen": validation.get("landmark_counts"),
+            "validation": validation,
+        }
+    )
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 """Tests for paleo-geo-time queries (offline ICS data)."""
+
 import json
 import os
 import subprocess
@@ -7,8 +8,15 @@ import unittest
 from pathlib import Path
 
 _HERE = Path(__file__).resolve().parent
-_SCRIPT = (_HERE.parent / ".claude" / "skills" / "paleontology-research-skills"
-           / "paleo-geo-time" / "scripts" / "geo_time_query.py")
+_SCRIPT = (
+    _HERE.parent
+    / ".claude"
+    / "skills"
+    / "paleontology-research-skills"
+    / "paleo-geo-time"
+    / "scripts"
+    / "geo_time_query.py"
+)
 
 
 def run(args):
@@ -17,15 +25,17 @@ def run(args):
     env["PYTHONIOENCODING"] = "utf-8"
     r = subprocess.run(
         [sys.executable, str(_SCRIPT)] + args,
-        capture_output=True, text=True,
-        encoding="utf-8", errors="replace",
-        env=env, timeout=30,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        env=env,
+        timeout=30,
     )
     return json.loads(r.stdout) if r.stdout else {}
 
 
 class TestGeoTime(unittest.TestCase):
-
     def test_period_jurassic(self):
         d = run(["--period", "Jurassic"])
         self.assertEqual(len(d["matches"]), 1)

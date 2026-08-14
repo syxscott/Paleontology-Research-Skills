@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Show one session by id."""
+
 from __future__ import annotations
 
 import argparse
@@ -11,7 +12,7 @@ _SHARED = os.path.normpath(os.path.join(_HERE, "..", "..", "scripts"))
 if _SHARED not in sys.path:
     sys.path.insert(0, _SHARED)
 
-from paleo_common import sessions_root, read_json, print_json  # noqa: E402
+from paleo_common import print_json, read_json, sessions_root  # noqa: E402
 
 
 def _truncate_turn(t, limit):

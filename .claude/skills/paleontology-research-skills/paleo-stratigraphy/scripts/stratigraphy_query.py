@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Query PBDB for fossil-bearing formations/strata."""
+
 from __future__ import annotations
 
 import argparse
@@ -56,7 +57,7 @@ def query_top_taxa(formation, taxa_limit=20):
     if err:
         return [], err
     counter = Counter()
-    for r in (data.get("records") or []):
+    for r in data.get("records") or []:
         name = r.get("tna") or r.get("idn")
         if name:
             counter[name] += 1
@@ -118,7 +119,7 @@ def _summarise(records):
         "countries": [{"code": c, "count": n} for c, n in countries.most_common()],
         "states": [{"name": s, "count": n} for s, n in states.most_common(10)],
         "formations_in_query": [{"name": f, "count": n} for f, n in formations.most_common(20)],
-        "lithologies": [{"name": l, "count": n} for l, n in lithos.most_common(10)],
+        "lithologies": [{"name": lith, "count": n} for lith, n in lithos.most_common(10)],
     }
 
 
@@ -129,18 +130,24 @@ def main(argv=None):
     grp.add_argument("--interval", help="Geological interval, e.g. 'Late Cretaceous'")
     p.add_argument("--country", help="ISO 2-letter country code (e.g. CN, US, MN)")
     p.add_argument("--limit", type=int, default=500)
-    p.add_argument("--taxa-limit", type=int, default=20,
-                   help="When --formation is set, also fetch the top-N taxa")
-    p.add_argument("--collections-detail", action="store_true",
-                   help="Include the raw collections array in output (large!)")
+    p.add_argument(
+        "--taxa-limit", type=int, default=20, help="When --formation is set, also fetch the top-N taxa"
+    )
+    p.add_argument(
+        "--collections-detail",
+        action="store_true",
+        help="Include the raw collections array in output (large!)",
+    )
     args = p.parse_args(argv)
 
-    data, err = query_collections(args.formation, args.country, args.interval,
-                                  max(1, min(args.limit, 5000)))
+    data, err = query_collections(args.formation, args.country, args.interval, max(1, min(args.limit, 5000)))
     if err:
-        print_json({"error": err, "query": {"formation": args.formation,
-                                            "interval": args.interval,
-                                            "country": args.country}})
+        print_json(
+            {
+                "error": err,
+                "query": {"formation": args.formation, "interval": args.interval, "country": args.country},
+            }
+        )
         return
 
     records = data.get("records") or []
@@ -148,10 +155,12 @@ def main(argv=None):
 
     out = {
         "source": "PBDB",
-        "query": {"formation": args.formation,
-                  "interval": args.interval,
-                  "country": args.country,
-                  "limit": args.limit},
+        "query": {
+            "formation": args.formation,
+            "interval": args.interval,
+            "country": args.country,
+            "limit": args.limit,
+        },
         "summary": summary,
     }
 

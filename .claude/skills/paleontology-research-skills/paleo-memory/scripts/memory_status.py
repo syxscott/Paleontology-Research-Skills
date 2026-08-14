@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Report counts and paths of the local memory store."""
+
 from __future__ import annotations
 
 import os
@@ -28,16 +29,18 @@ def main():
         except OSError:
             long_count = 0
     arch_count = len(list(arch_dir.glob("*.json"))) if arch_dir.exists() else 0
-    print_json({
-        "shortCount": short_count,
-        "longCount": long_count,
-        "archiveCount": arch_count,
-        "memoryRoot": str(h),
-        "shortDir": str(short_dir),
-        "longFile": str(long_file),
-        "archiveDir": str(arch_dir),
-        "dataHome": str(data_home()),
-    })
+    print_json(
+        {
+            "shortCount": short_count,
+            "longCount": long_count,
+            "archiveCount": arch_count,
+            "memoryRoot": str(h),
+            "shortDir": str(short_dir),
+            "longFile": str(long_file),
+            "archiveDir": str(arch_dir),
+            "dataHome": str(data_home()),
+        }
+    )
 
 
 if __name__ == "__main__":

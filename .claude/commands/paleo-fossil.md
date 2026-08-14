@@ -3,6 +3,17 @@ description: Query PBDB for fossil occurrences of a taxon
 argument-hint: <taxon-name or natural-language description>
 allowed-tools: Bash, Read
 ---
+Before running any script, resolve the toolkit root (supports both
+**user-level** install at `~/.claude/skills/` and **project-level** install at
+`.claude/skills/`):
+
+```bash
+if [ -d "$HOME/.claude/skills/paleontology-research-skills" ]; then
+  PRS="$HOME/.claude/skills/paleontology-research-skills"
+else
+  PRS=".claude/skills/paleontology-research-skills"
+fi
+```
 
 The user wants fossil occurrences. Use the **paleo-pbdb** skill to query the
 Paleobiology Database for:
@@ -14,7 +25,7 @@ Procedure:
 2. Run the PBDB query script with `--respect-profile` so the user's preferred
    occurrence limit applies:
    ```bash
-   python3 .claude/skills/paleontology-research-skills/paleo-pbdb/scripts/pbdb_query.py \
+   python3 "$PRS"/paleo-pbdb/scripts/pbdb_query.py \
        --base-name "<TAXON>" --respect-profile
    ```
    If the user supplied an age range, also pass `--min-ma` / `--max-ma`.

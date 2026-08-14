@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Optimization Batch O1 — P0 (must-have) files for a public repo."""
+
 import pathlib
 
 ROOT = pathlib.Path(r"D:\GIthub\自制Claude Code skills")
@@ -7,7 +8,7 @@ ROOT = pathlib.Path(r"D:\GIthub\自制Claude Code skills")
 FILES = {}
 
 # ============ 1. requirements.txt ============
-FILES[ROOT / "requirements.txt"] = '''# Core runtime dependencies — none for the base toolkit
+FILES[ROOT / "requirements.txt"] = """# Core runtime dependencies — none for the base toolkit
 # Everything in paleontology-research-skills uses Python 3.9+ stdlib only
 # EXCEPT the optional sub-skills below.
 #
@@ -16,11 +17,11 @@ FILES[ROOT / "requirements.txt"] = '''# Core runtime dependencies — none for t
 #
 # Or install the package (with extras) via:
 #   pip install -e ".[morphometric]"
-'''
+"""
 
 
 # ============ 2. requirements-dev.txt ============
-FILES[ROOT / "requirements-dev.txt"] = '''# Development dependencies
+FILES[ROOT / "requirements-dev.txt"] = """# Development dependencies
 # Install with:  pip install -r requirements-dev.txt
 
 # Test runner (the unit tests use stdlib unittest; pytest is for coverage)
@@ -33,11 +34,11 @@ ruff>=0.4
 # Optional extras of the project itself (so dev environment has them all)
 Pillow>=10.0
 openpyxl>=3.0
-'''
+"""
 
 
 # ============ 3. pyproject.toml ============
-FILES[ROOT / "pyproject.toml"] = '''[build-system]
+FILES[ROOT / "pyproject.toml"] = """[build-system]
 requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
@@ -114,11 +115,11 @@ ignore = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-'''
+"""
 
 
 # ============ 4. CHANGELOG.md ============
-FILES[ROOT / "CHANGELOG.md"] = '''# Changelog
+FILES[ROOT / "CHANGELOG.md"] = """# Changelog
 
 All notable changes to **Paleontology Research Skills** are documented here.
 
@@ -189,11 +190,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/syxscott/Paleontology-Research-Skills/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/syxscott/Paleontology-Research-Skills/releases/tag/v1.0.0
-'''
+"""
 
 
 # ============ 5. CONTRIBUTING.md ============
-FILES[ROOT / "CONTRIBUTING.md"] = '''# Contributing to Paleontology Research Skills
+FILES[ROOT / "CONTRIBUTING.md"] = """# Contributing to Paleontology Research Skills
 
 Thanks for your interest in contributing! 🦕
 
@@ -482,11 +483,11 @@ For security vulnerabilities, see [`SECURITY.md`](./SECURITY.md).
 
 By contributing, you agree your contributions will be licensed under the
 [MIT License](./LICENSE).
-'''
+"""
 
 
 # ============ 6. .gitattributes (fix CRLF/LF mess) ============
-FILES[ROOT / ".gitattributes"] = '''# Always use LF line endings inside the repository.
+FILES[ROOT / ".gitattributes"] = """# Always use LF line endings inside the repository.
 # Windows checkouts will see CRLF locally if core.autocrlf=true,
 # but git always stores LF.
 
@@ -517,7 +518,7 @@ Makefile text eol=lf
 *.zip  binary
 *.gz   binary
 *.tar  binary
-'''
+"""
 
 
 # ============ 7. README badges (modify existing README) ============

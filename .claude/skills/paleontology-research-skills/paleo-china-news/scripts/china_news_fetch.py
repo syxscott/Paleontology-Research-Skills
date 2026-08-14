@@ -5,6 +5,7 @@
 1-second delay between calls). It is best-effort: when a site's HTML changes
 or is offline, the affected source is skipped with an explanatory error.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -25,9 +26,11 @@ if _SHARED not in sys.path:
 
 from paleo_common import print_json  # noqa: E402
 
-UA = ("Mozilla/5.0 (compatible; Paleontology-Research-Skills/1.0; "
-      "+https://github.com/syxscott/Paleontology-Research-Skills; "
-      "respectful crawler)")
+UA = (
+    "Mozilla/5.0 (compatible; Paleontology-Research-Skills/1.0; "
+    "+https://github.com/syxscott/Paleontology-Research-Skills; "
+    "respectful crawler)"
+)
 TIMEOUT = 30
 
 SOURCES = {
@@ -61,13 +64,31 @@ DATE_RE = re.compile(r"(20\d{2})[-/年.](\d{1,2})[-/月.](\d{1,2})")
 
 # Simple keyword → tag mapping for auto-tagging
 TAG_MAP = {
-    "恐龙": "恐龙", "鸟": "古鸟", "翼龙": "翼龙", "鱼": "古鱼",
-    "三叶虫": "三叶虫", "菊石": "菊石", "腕足": "腕足类",
-    "寒武": "寒武纪", "奥陶": "奥陶纪", "志留": "志留纪", "泥盆": "泥盆纪",
-    "石炭": "石炭纪", "二叠": "二叠纪", "三叠": "三叠纪", "侏罗": "侏罗纪",
-    "白垩": "白垩纪", "古近": "古近纪", "新近": "新近纪",
-    "辽宁": "辽宁", "云南": "云南", "贵州": "贵州", "新疆": "新疆",
-    "热河": "热河生物群", "澄江": "澄江生物群", "凯里": "凯里生物群",
+    "恐龙": "恐龙",
+    "鸟": "古鸟",
+    "翼龙": "翼龙",
+    "鱼": "古鱼",
+    "三叶虫": "三叶虫",
+    "菊石": "菊石",
+    "腕足": "腕足类",
+    "寒武": "寒武纪",
+    "奥陶": "奥陶纪",
+    "志留": "志留纪",
+    "泥盆": "泥盆纪",
+    "石炭": "石炭纪",
+    "二叠": "二叠纪",
+    "三叠": "三叠纪",
+    "侏罗": "侏罗纪",
+    "白垩": "白垩纪",
+    "古近": "古近纪",
+    "新近": "新近纪",
+    "辽宁": "辽宁",
+    "云南": "云南",
+    "贵州": "贵州",
+    "新疆": "新疆",
+    "热河": "热河生物群",
+    "澄江": "澄江生物群",
+    "凯里": "凯里生物群",
 }
 
 
@@ -129,15 +150,17 @@ def _scrape_source(key, src_info, limit_per_source):
         if url in seen_urls:
             continue
         seen_urls.add(url)
-        items.append({
-            "title": title,
-            "source": src_info["name"],
-            "source_key": key,
-            "date": _extract_date(title),
-            "url": url,
-            "summary": title[:200],
-            "tags": _auto_tags(title),
-        })
+        items.append(
+            {
+                "title": title,
+                "source": src_info["name"],
+                "source_key": key,
+                "date": _extract_date(title),
+                "url": url,
+                "summary": title[:200],
+                "tags": _auto_tags(title),
+            }
+        )
         if len(items) >= limit_per_source:
             break
     return items, None
@@ -146,12 +169,15 @@ def _scrape_source(key, src_info, limit_per_source):
 def main(argv=None):
     p = argparse.ArgumentParser(description="Aggregate Chinese paleontology news")
     p.add_argument("--source", choices=list(SOURCES) + ["all"], default="all")
-    p.add_argument("--limit", type=int, default=20,
-                   help="Total max items returned (across sources)")
+    p.add_argument("--limit", type=int, default=20, help="Total max items returned (across sources)")
     p.add_argument("--per-source-limit", type=int, default=10)
     p.add_argument("--keyword", help="Filter to items whose title contains this string")
-    p.add_argument("--since-days", type=int, default=None,
-                   help="Only include items dated within N days (if date is parseable)")
+    p.add_argument(
+        "--since-days",
+        type=int,
+        default=None,
+        help="Only include items dated within N days (if date is parseable)",
+    )
     p.add_argument("--polite-delay", type=float, default=1.0)
     args = p.parse_args(argv)
 
@@ -191,16 +217,22 @@ def main(argv=None):
     all_items.sort(key=lambda x: x.get("date") or "", reverse=True)
     all_items = all_items[: max(1, args.limit)]
 
-    print_json({
-        "source": "China Fossil News Aggregator",
-        "query": {"keyword": args.keyword, "since_days": args.since_days,
-                  "source": args.source, "limit": args.limit},
-        "fetched_at": dt.datetime.now(tz=dt.timezone.utc).isoformat(timespec="seconds"),
-        "count": len(all_items),
-        "items": all_items,
-        "errors": errors,
-        "sources_attempted": sources_to_hit,
-    })
+    print_json(
+        {
+            "source": "China Fossil News Aggregator",
+            "query": {
+                "keyword": args.keyword,
+                "since_days": args.since_days,
+                "source": args.source,
+                "limit": args.limit,
+            },
+            "fetched_at": dt.datetime.now(tz=dt.timezone.utc).isoformat(timespec="seconds"),
+            "count": len(all_items),
+            "items": all_items,
+            "errors": errors,
+            "sources_attempted": sources_to_hit,
+        }
+    )
 
 
 if __name__ == "__main__":

@@ -3,6 +3,17 @@ description: Search CrossRef for paleontology literature
 argument-hint: <topic / keywords>
 allowed-tools: Bash, Read
 ---
+Before running any script, resolve the toolkit root (supports both
+**user-level** install at `~/.claude/skills/` and **project-level** install at
+`.claude/skills/`):
+
+```bash
+if [ -d "$HOME/.claude/skills/paleontology-research-skills" ]; then
+  PRS="$HOME/.claude/skills/paleontology-research-skills"
+else
+  PRS=".claude/skills/paleontology-research-skills"
+fi
+```
 
 The user wants scholarly literature on a paleontology topic. Use the
 **paleo-crossref** skill to search CrossRef for:
@@ -13,7 +24,7 @@ Procedure:
 1. Run the CrossRef search with the user's request as the query, including
    abstracts when available:
    ```bash
-   python3 .claude/skills/paleontology-research-skills/paleo-crossref/scripts/crossref_search.py \
+   python3 "$PRS"/paleo-crossref/scripts/crossref_search.py \
        --query "$ARGUMENTS" --rows 10 --include-abstract --respect-profile
    ```
 2. For the top 3 most relevant results, optionally call

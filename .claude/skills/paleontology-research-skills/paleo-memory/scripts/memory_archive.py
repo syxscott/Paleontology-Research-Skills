@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Archive old short-term memory entries."""
+
 from __future__ import annotations
 
 import argparse
@@ -19,7 +20,10 @@ def _ts(entry, path):
     raw = entry.get("timestamp") or entry.get("created_at")
     if isinstance(raw, str):
         try:
-            return dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            ts = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            if ts.tzinfo is None:
+                ts = ts.replace(tzinfo=dt.timezone.utc)
+            return ts
         except ValueError:
             pass
     try:
@@ -38,10 +42,18 @@ def main(argv=None):
     arch_dir = memory_root() / "archive" / "short"
     moved, kept = [], 0
     if not short_dir.exists():
-        print_json({"moved": [], "movedCount": 0, "kept": 0,
-                    "cutoffDays": args.days, "dryRun": args.dry_run,
-                    "note": "no short-term memory directory yet",
-                    "shortDir": str(short_dir), "archiveDir": str(arch_dir)})
+        print_json(
+            {
+                "moved": [],
+                "movedCount": 0,
+                "kept": 0,
+                "cutoffDays": args.days,
+                "dryRun": args.dry_run,
+                "note": "no short-term memory directory yet",
+                "shortDir": str(short_dir),
+                "archiveDir": str(arch_dir),
+            }
+        )
         return
 
     cutoff = dt.datetime.now(tz=dt.timezone.utc) - dt.timedelta(days=args.days)
@@ -60,15 +72,17 @@ def main(argv=None):
             moved.append({"file": f.name, "timestamp": ts.isoformat(), "target": str(target)})
         else:
             kept += 1
-    print_json({
-        "moved": moved,
-        "movedCount": len(moved),
-        "kept": kept,
-        "cutoffDays": args.days,
-        "dryRun": args.dry_run,
-        "shortDir": str(short_dir),
-        "archiveDir": str(arch_dir),
-    })
+    print_json(
+        {
+            "moved": moved,
+            "movedCount": len(moved),
+            "kept": kept,
+            "cutoffDays": args.days,
+            "dryRun": args.dry_run,
+            "shortDir": str(short_dir),
+            "archiveDir": str(arch_dir),
+        }
+    )
 
 
 if __name__ == "__main__":

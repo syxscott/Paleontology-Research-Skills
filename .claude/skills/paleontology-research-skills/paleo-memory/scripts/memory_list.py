@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """List recent entries from the local memory store."""
+
 from __future__ import annotations
 
 import argparse
@@ -12,8 +13,11 @@ if _SHARED not in sys.path:
     sys.path.insert(0, _SHARED)
 
 from paleo_common import (  # noqa: E402
-    _iter_short_memory, _iter_long_memory, _iter_archive_memory,
-    print_json, data_home,
+    _iter_archive_memory,
+    _iter_long_memory,
+    _iter_short_memory,
+    data_home,
+    print_json,
 )
 
 
@@ -32,13 +36,15 @@ def main(argv=None):
         iters += list(_iter_archive_memory())
 
     iters.sort(key=lambda e: e.get("timestamp") or e.get("created_at") or "", reverse=True)
-    cut = iters[:max(1, args.limit)]
-    print_json({
-        "scope": args.scope,
-        "data_home": str(data_home()),
-        "count": len(cut),
-        "entries": cut,
-    })
+    cut = iters[: max(1, args.limit)]
+    print_json(
+        {
+            "scope": args.scope,
+            "data_home": str(data_home()),
+            "count": len(cut),
+            "entries": cut,
+        }
+    )
 
 
 if __name__ == "__main__":

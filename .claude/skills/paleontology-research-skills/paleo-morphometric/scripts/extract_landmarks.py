@@ -7,6 +7,7 @@ Algorithm:
   3. Moore-neighbourhood boundary trace
   4. Arc-length resample to N points
 """
+
 from __future__ import annotations
 
 import argparse
@@ -25,12 +26,14 @@ from paleo_common import print_json  # noqa: E402
 
 try:
     from PIL import Image
+
     _PIL_OK = True
 except ImportError:
     _PIL_OK = False
 
 
 # ========== Pure-Python image utilities ==========
+
 
 def _load_binary_mask(image_path, threshold):
     """Open image, return (binary_mask, (width, height)).
@@ -104,8 +107,7 @@ def _trace_boundary(mask):
     if not start:
         return []
     # 8-neighbours in clockwise order starting from N
-    DIRS = [(0, -1), (1, -1), (1, 0), (1, 1),
-            (0, 1), (-1, 1), (-1, 0), (-1, -1)]
+    DIRS = [(0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1)]
     boundary = [start]
     cur = start
     # Direction we came from on the first move — set so we start checking from E
@@ -187,6 +189,7 @@ def _resample(boundary, n):
 
 # ========== Export ==========
 
+
 def _save_json(out_path, payload):
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     Path(out_path).write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -209,10 +212,7 @@ def _save_csv(out_path, payload):
     rows = ["specimen_id,landmark_id,x,y,type,name"]
     sid = payload["specimen_id"]
     for lm in payload["landmarks"]:
-        rows.append(
-            f"{sid},{lm['id']},{lm['x']:.4f},{lm['y']:.4f},"
-            f"{lm['type']},{lm['name']}"
-        )
+        rows.append(f"{sid},{lm['id']},{lm['x']:.4f},{lm['y']:.4f},{lm['type']},{lm['name']}")
     Path(out_path).write_text("\n".join(rows) + "\n", encoding="utf-8")
 
 
@@ -241,16 +241,21 @@ def export(payload, out_dir, formats, base_name):
         fmt = fmt.strip().lower()
         target = out_dir / f"{base_name}.{fmt}"
         if fmt == "json":
-            _save_json(target, payload); written["json"] = str(target)
+            _save_json(target, payload)
+            written["json"] = str(target)
         elif fmt == "tps":
-            _save_tps(target, payload); written["tps"] = str(target)
+            _save_tps(target, payload)
+            written["tps"] = str(target)
         elif fmt == "csv":
-            _save_csv(target, payload); written["csv"] = str(target)
+            _save_csv(target, payload)
+            written["csv"] = str(target)
         elif fmt in ("xlsx", "excel"):
             target = out_dir / f"{base_name}.xlsx"
             ok, err = _save_excel(target, payload)
-            if ok: written["xlsx"] = str(target)
-            else:  errors["xlsx"] = err
+            if ok:
+                written["xlsx"] = str(target)
+            else:
+                errors["xlsx"] = err
         else:
             errors[fmt] = "Unknown format"
     return written, errors
@@ -258,24 +263,27 @@ def export(payload, out_dir, formats, base_name):
 
 # ========== Main ==========
 
+
 def main(argv=None):
     p = argparse.ArgumentParser(description="Extract N landmarks from a fossil silhouette image")
     p.add_argument("--image", required=True)
     p.add_argument("--num-landmarks", type=int, default=64)
-    p.add_argument("--threshold", type=int, default=150,
-                   help="Binarization threshold (0-255). Foreground = pixel <= threshold.")
+    p.add_argument(
+        "--threshold",
+        type=int,
+        default=150,
+        help="Binarization threshold (0-255). Foreground = pixel <= threshold.",
+    )
     p.add_argument("--out-dir", default="morphometric_output")
-    p.add_argument("--formats", default="json,tps,csv",
-                   help="Comma-separated: json,tps,csv,xlsx")
-    p.add_argument("--specimen-id", default=None,
-                   help="ID for this specimen (default: image filename stem)")
-    p.add_argument("--scale", type=float, default=1.0,
-                   help="Scale factor for TPS (e.g. pixels per mm)")
+    p.add_argument("--formats", default="json,tps,csv", help="Comma-separated: json,tps,csv,xlsx")
+    p.add_argument("--specimen-id", default=None, help="ID for this specimen (default: image filename stem)")
+    p.add_argument("--scale", type=float, default=1.0, help="Scale factor for TPS (e.g. pixels per mm)")
     args = p.parse_args(argv)
 
     if not _PIL_OK:
-        print_json({"error": "Pillow not installed. Run: pip install Pillow",
-                    "image": args.image, "landmarks": []})
+        print_json(
+            {"error": "Pillow not installed. Run: pip install Pillow", "image": args.image, "landmarks": []}
+        )
         return
 
     image_path = Path(args.image).expanduser().resolve()
@@ -295,25 +303,33 @@ def main(argv=None):
 
     largest, comp_size = _largest_component(mask)
     if not largest or comp_size < num:
-        print_json({"error": f"No usable foreground component (size={comp_size}, "
-                             f"need ≥ {num}). Adjust --threshold.",
-                    "image": str(image_path),
-                    "image_size": {"width": w, "height": h},
-                    "landmarks": []})
+        print_json(
+            {
+                "error": f"No usable foreground component (size={comp_size}, "
+                f"need ≥ {num}). Adjust --threshold.",
+                "image": str(image_path),
+                "image_size": {"width": w, "height": h},
+                "landmarks": [],
+            }
+        )
         return
 
     boundary = _trace_boundary(largest)
     if len(boundary) < num:
-        print_json({"error": f"Boundary too short ({len(boundary)} pts < {num}). "
-                             f"Image likely too small or shape too simple.",
-                    "image": str(image_path), "landmarks": []})
+        print_json(
+            {
+                "error": f"Boundary too short ({len(boundary)} pts < {num}). "
+                f"Image likely too small or shape too simple.",
+                "image": str(image_path),
+                "landmarks": [],
+            }
+        )
         return
 
     pts = _resample(boundary, num)
 
     landmarks = [
-        {"id": i + 1, "x": round(x, 4), "y": round(y, 4),
-         "type": "semilandmark", "name": f"LM{i+1:02d}"}
+        {"id": i + 1, "x": round(x, 4), "y": round(y, 4), "type": "semilandmark", "name": f"LM{i + 1:02d}"}
         for i, (x, y) in enumerate(pts)
     ]
 
@@ -333,18 +349,20 @@ def main(argv=None):
 
     written, errors = export(payload, args.out_dir, args.formats.split(","), specimen_id)
 
-    print_json({
-        "specimen_id": specimen_id,
-        "image": str(image_path),
-        "image_size": {"width": w, "height": h},
-        "num_landmarks": num,
-        "threshold": thr,
-        "component_size_px": comp_size,
-        "boundary_pixel_count": len(boundary),
-        "files_written": written,
-        "export_errors": errors,
-        "landmarks_preview": landmarks[:5],
-    })
+    print_json(
+        {
+            "specimen_id": specimen_id,
+            "image": str(image_path),
+            "image_size": {"width": w, "height": h},
+            "num_landmarks": num,
+            "threshold": thr,
+            "component_size_px": comp_size,
+            "boundary_pixel_count": len(boundary),
+            "files_written": written,
+            "export_errors": errors,
+            "landmarks_preview": landmarks[:5],
+        }
+    )
 
 
 if __name__ == "__main__":

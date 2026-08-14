@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Query the Paleobiology Database for a taxon's full classification hierarchy."""
+
 from __future__ import annotations
 
 import argparse
@@ -24,10 +25,24 @@ UA = "Paleontology-Research-Skills/1.0 (https://github.com/syxscott/Paleontology
 
 # Standard rank hierarchy from high to low
 RANK_ORDER = [
-    "kingdom", "phylum", "subphylum", "class", "subclass", "infraclass",
-    "superorder", "order", "suborder", "infraorder",
-    "superfamily", "family", "subfamily", "tribe",
-    "genus", "subgenus", "species", "subspecies",
+    "kingdom",
+    "phylum",
+    "subphylum",
+    "class",
+    "subclass",
+    "infraclass",
+    "superorder",
+    "order",
+    "suborder",
+    "infraorder",
+    "superfamily",
+    "family",
+    "subfamily",
+    "tribe",
+    "genus",
+    "subgenus",
+    "species",
+    "subspecies",
 ]
 
 
@@ -47,12 +62,12 @@ def _request(url):
 def _hierarchy_from_record(rec):
     """Extract the parent-rank chain from a PBDB taxon record with show=class,phylo."""
     pairs = [
-        ("kingdom",   "kgl"),
-        ("phylum",    "phl"),
-        ("class",     "cll"),
-        ("order",     "odl"),
-        ("family",    "fml"),
-        ("genus",     "gnl"),
+        ("kingdom", "kgl"),
+        ("phylum", "phl"),
+        ("class", "cll"),
+        ("order", "odl"),
+        ("family", "fml"),
+        ("genus", "gnl"),
     ]
     out = []
     for rank, key in pairs:
@@ -87,12 +102,29 @@ def _query_single(name):
         return None, f"No taxon found matching '{name}'"
     rec = records[0]
     rank_map = {
-        2: "subspecies", 3: "species", 4: "subgenus", 5: "genus",
-        6: "subtribe", 7: "tribe", 8: "subfamily", 9: "family",
-        10: "superfamily", 11: "infraorder", 12: "suborder", 13: "order",
-        14: "superorder", 15: "infraclass", 16: "subclass", 17: "class",
-        18: "superclass", 19: "subphylum", 20: "phylum", 21: "superphylum",
-        22: "subkingdom", 23: "kingdom", 24: "unranked",
+        2: "subspecies",
+        3: "species",
+        4: "subgenus",
+        5: "genus",
+        6: "subtribe",
+        7: "tribe",
+        8: "subfamily",
+        9: "family",
+        10: "superfamily",
+        11: "infraorder",
+        12: "suborder",
+        13: "order",
+        14: "superorder",
+        15: "infraclass",
+        16: "subclass",
+        17: "class",
+        18: "superclass",
+        19: "subphylum",
+        20: "phylum",
+        21: "superphylum",
+        22: "subkingdom",
+        23: "kingdom",
+        24: "unranked",
     }
     rank_raw = rec.get("rnk")
     rank_str = rank_map.get(rank_raw, "") if isinstance(rank_raw, int) else (rank_raw or "")
@@ -130,19 +162,26 @@ def _query_children(parent_name, rank_filter):
     if not isinstance(data, dict):
         return None, "PBDB returned non-dict"
     rank_map = {
-        3: "species", 5: "genus", 9: "family", 13: "order",
-        17: "class", 20: "phylum", 23: "kingdom",
+        3: "species",
+        5: "genus",
+        9: "family",
+        13: "order",
+        17: "class",
+        20: "phylum",
+        23: "kingdom",
     }
     children = []
-    for r in (data.get("records") or []):
+    for r in data.get("records") or []:
         rk_raw = r.get("rnk")
         rk = rank_map.get(rk_raw, "") if isinstance(rk_raw, int) else (rk_raw or "")
-        children.append({
-            "name": r.get("nam"),
-            "rank": rk,
-            "authority": (r.get("att") or "").strip() or None,
-            "taxon_id": r.get("oid"),
-        })
+        children.append(
+            {
+                "name": r.get("nam"),
+                "rank": rk,
+                "authority": (r.get("att") or "").strip() or None,
+                "taxon_id": r.get("oid"),
+            }
+        )
     return children, None
 
 
@@ -150,12 +189,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description="Query PBDB for taxonomic classification")
     grp = p.add_mutually_exclusive_group(required=True)
     grp.add_argument("--name", help="Taxon name (any rank)")
-    grp.add_argument("--children", dest="children",
-                     help="Parent taxon — return all descendants")
-    p.add_argument("--rank", help="When using --children, filter to this rank only "
-                                  "(species/genus/family/order/class/etc.)")
-    p.add_argument("--validity-only", action="store_true",
-                   help="Only report whether the name is valid")
+    grp.add_argument("--children", dest="children", help="Parent taxon — return all descendants")
+    p.add_argument(
+        "--rank",
+        help="When using --children, filter to this rank only (species/genus/family/order/class/etc.)",
+    )
+    p.add_argument("--validity-only", action="store_true", help="Only report whether the name is valid")
     args = p.parse_args(argv)
 
     if args.children:
@@ -163,12 +202,14 @@ def main(argv=None):
         if err:
             print_json({"error": err, "parent": args.children, "children": []})
             return
-        print_json({
-            "source": "PBDB",
-            "query": {"parent": args.children, "rank_filter": args.rank},
-            "count": len(children),
-            "children": children,
-        })
+        print_json(
+            {
+                "source": "PBDB",
+                "query": {"parent": args.children, "rank_filter": args.rank},
+                "count": len(children),
+                "children": children,
+            }
+        )
         return
 
     result, err = _query_single(args.name)
@@ -180,22 +221,26 @@ def main(argv=None):
     raw = result["raw"]
 
     if args.validity_only:
-        print_json({
-            "source": "PBDB",
-            "query": {"name": args.name},
-            "is_valid": taxon["status"] == "valid",
-            "status": taxon["status"],
-            "accepted_name": taxon["accepted_name"],
-        })
+        print_json(
+            {
+                "source": "PBDB",
+                "query": {"name": args.name},
+                "is_valid": taxon["status"] == "valid",
+                "status": taxon["status"],
+                "accepted_name": taxon["accepted_name"],
+            }
+        )
         return
 
     hierarchy = _hierarchy_from_record(raw)
-    print_json({
-        "source": "PBDB",
-        "query": {"name": args.name},
-        "taxon": taxon,
-        "hierarchy": hierarchy,
-    })
+    print_json(
+        {
+            "source": "PBDB",
+            "query": {"name": args.name},
+            "taxon": taxon,
+            "hierarchy": hierarchy,
+        }
+    )
 
 
 if __name__ == "__main__":

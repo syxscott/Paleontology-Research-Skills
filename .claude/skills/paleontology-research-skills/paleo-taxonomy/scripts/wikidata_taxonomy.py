@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Cross-reference a taxon with Wikidata via SPARQL (vernacular names, image, common labels)."""
+
 from __future__ import annotations
 
 import argparse
@@ -40,16 +41,17 @@ def run_sparql(query):
 
 def search(name):
     # SPARQL: find Wikidata items whose taxon name matches
-    safe = name.replace(chr(34), "\\" + chr(34))
+    # Escape backslash, double quote, and newlines for the SPARQL string literal.
+    safe = (name or "").replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n").replace("\r", "\\r")
     query = (
         "SELECT ?item ?itemLabel ?taxonName ?parentLabel ?rank ?rankLabel ?image ?cnLabel ?enLabel WHERE {\n"
         '  ?item wdt:P225 "' + safe + '" .\n'
         "  OPTIONAL { ?item wdt:P171 ?parent . }\n"
         "  OPTIONAL { ?item wdt:P105 ?rank . }\n"
         "  OPTIONAL { ?item wdt:P18 ?image . }\n"
-        "  OPTIONAL { ?item rdfs:label ?cn FILTER(LANG(?cn) = \"zh\") . BIND(?cn AS ?cnLabel) }\n"
-        "  OPTIONAL { ?item rdfs:label ?en FILTER(LANG(?en) = \"en\") . BIND(?en AS ?enLabel) }\n"
-        "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,zh\" . }\n"
+        '  OPTIONAL { ?item rdfs:label ?cn FILTER(LANG(?cn) = "zh") . BIND(?cn AS ?cnLabel) }\n'
+        '  OPTIONAL { ?item rdfs:label ?en FILTER(LANG(?en) = "en") . BIND(?en AS ?enLabel) }\n'
+        '  SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh" . }\n'
         "  BIND(?itemLabel AS ?taxonName)\n"
         "}\n"
         "LIMIT 5"
@@ -70,26 +72,32 @@ def main(argv=None):
     bindings = ((data or {}).get("results") or {}).get("bindings") or []
     matches = []
     for b in bindings:
-        def _v(k):
-            x = b.get(k)
-            return x.get("value") if x else None
-        matches.append({
-            "wikidata_id": (_v("item") or "").rsplit("/", 1)[-1],
-            "label": _v("itemLabel"),
-            "taxon_name": _v("taxonName"),
-            "rank": _v("rankLabel"),
-            "parent": _v("parentLabel"),
-            "image": _v("image"),
-            "chinese_label": _v("cnLabel"),
-            "english_label": _v("enLabel"),
-        })
 
-    print_json({
-        "source": "Wikidata",
-        "query": {"name": args.name},
-        "count": len(matches),
-        "matches": matches,
-    })
+        def _v(k, binding=b):
+            x = binding.get(k)
+            return x.get("value") if x else None
+
+        matches.append(
+            {
+                "wikidata_id": (_v("item") or "").rsplit("/", 1)[-1],
+                "label": _v("itemLabel"),
+                "taxon_name": _v("taxonName"),
+                "rank": _v("rankLabel"),
+                "parent": _v("parentLabel"),
+                "image": _v("image"),
+                "chinese_label": _v("cnLabel"),
+                "english_label": _v("enLabel"),
+            }
+        )
+
+    print_json(
+        {
+            "source": "Wikidata",
+            "query": {"name": args.name},
+            "count": len(matches),
+            "matches": matches,
+        }
+    )
 
 
 if __name__ == "__main__":

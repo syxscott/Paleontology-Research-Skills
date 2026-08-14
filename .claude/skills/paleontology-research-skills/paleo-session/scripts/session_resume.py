@@ -4,6 +4,7 @@
 The output is intended to be injected into the model's context as a brief
 "where we left off" summary, NOT to be printed to the user verbatim.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -15,7 +16,7 @@ _SHARED = os.path.normpath(os.path.join(_HERE, "..", "..", "scripts"))
 if _SHARED not in sys.path:
     sys.path.insert(0, _SHARED)
 
-from paleo_common import sessions_root, read_json, print_json  # noqa: E402
+from paleo_common import print_json, read_json, sessions_root  # noqa: E402
 
 
 def main(argv=None):
@@ -32,12 +33,12 @@ def main(argv=None):
         return
     s = read_json(path, default={}) or {}
     turns = s.get("turns") or []
-    tail = turns[-max(1, args.last_n_turns):]
+    tail = turns[-max(1, args.last_n_turns) :]
     out_turns = []
     for t in tail:
         c = t.get("content") or ""
         if len(c) > args.turn_limit:
-            c = c[:args.turn_limit] + " [..truncated..]"
+            c = c[: args.turn_limit] + " [..truncated..]"
         out_turns.append({"role": t.get("role"), "content": c})
     payload = {
         "session_id": s.get("session_id") or path.stem,

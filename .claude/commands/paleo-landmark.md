@@ -3,6 +3,17 @@ description: Extract geometric morphometric landmarks from a fossil image
 argument-hint: <image-path> [num-landmarks=64] [threshold=150]
 allowed-tools: Bash, Read
 ---
+Before running any script, resolve the toolkit root (supports both
+**user-level** install at `~/.claude/skills/` and **project-level** install at
+`.claude/skills/`):
+
+```bash
+if [ -d "$HOME/.claude/skills/paleontology-research-skills" ]; then
+  PRS="$HOME/.claude/skills/paleontology-research-skills"
+else
+  PRS=".claude/skills/paleontology-research-skills"
+fi
+```
 
 The user wants to extract morphometric landmarks from a fossil image. Use the
 **paleo-morphometric** skill on this argument:
@@ -15,7 +26,7 @@ Procedure:
    `threshold=T` follow.
 2. Run:
    ```bash
-   python3 .claude/skills/paleontology-research-skills/paleo-morphometric/scripts/extract_landmarks.py \
+   python3 "$PRS"/paleo-morphometric/scripts/extract_landmarks.py \
        --image "<IMAGE_PATH>" \
        --num-landmarks <NUM_OR_64> \
        --threshold <THR_OR_150> \
@@ -24,7 +35,7 @@ Procedure:
    ```
 3. Then visualise:
    ```bash
-   python3 .claude/skills/paleontology-research-skills/paleo-morphometric/scripts/visualize_landmarks.py \
+   python3 "$PRS"/paleo-morphometric/scripts/visualize_landmarks.py \
        --image "<IMAGE_PATH>" \
        --landmarks morphometric_output/<basename>.json \
        --out morphometric_output/<basename>_annotated.png \

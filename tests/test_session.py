@@ -1,5 +1,5 @@
 """Tests for paleo-session session storage behaviour (offline)."""
-import json
+
 import os
 import sys
 import tempfile
@@ -13,7 +13,6 @@ import paleo_common as pc  # noqa: E402
 
 
 class TestSessionPaths(unittest.TestCase):
-
     def setUp(self):
         self.tmp = tempfile.mkdtemp()
         os.environ["PALEONTOLOGY_RESEARCH_SKILLS_HOME"] = self.tmp
@@ -32,7 +31,6 @@ class TestSessionPaths(unittest.TestCase):
 
 
 class TestSearchMemoryEmpty(unittest.TestCase):
-
     def setUp(self):
         self.tmp = tempfile.mkdtemp()
         os.environ["PALEONTOLOGY_RESEARCH_SKILLS_HOME"] = self.tmp
@@ -46,7 +44,6 @@ class TestSearchMemoryEmpty(unittest.TestCase):
 
 
 class TestProfileLoad(unittest.TestCase):
-
     def setUp(self):
         self.tmp = tempfile.mkdtemp()
         os.environ["PALEONTOLOGY_RESEARCH_SKILLS_HOME"] = self.tmp

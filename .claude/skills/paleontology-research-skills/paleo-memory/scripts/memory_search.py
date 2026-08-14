@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Search the user's local research memory by semantic similarity."""
+
 from __future__ import annotations
 
 import argparse
@@ -11,7 +12,7 @@ _SHARED = os.path.normpath(os.path.join(_HERE, "..", "..", "scripts"))
 if _SHARED not in sys.path:
     sys.path.insert(0, _SHARED)
 
-from paleo_common import search_memory, print_json, data_home  # noqa: E402
+from paleo_common import data_home, print_json, search_memory  # noqa: E402
 
 
 def main(argv=None):
@@ -23,13 +24,15 @@ def main(argv=None):
     args = p.parse_args(argv)
 
     hits = search_memory(args.query, scope=args.scope, top_k=args.top_k, min_score=args.min_score)
-    print_json({
-        "query": args.query,
-        "scope": args.scope,
-        "data_home": str(data_home()),
-        "count": len(hits),
-        "results": hits,
-    })
+    print_json(
+        {
+            "query": args.query,
+            "scope": args.scope,
+            "data_home": str(data_home()),
+            "count": len(hits),
+            "results": hits,
+        }
+    )
 
 
 if __name__ == "__main__":

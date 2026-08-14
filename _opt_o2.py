@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Optimization Batch O2 — P1 quality: CI, issue/PR templates, SECURITY,
-   shared constants, code unification."""
+shared constants, code unification."""
+
 import pathlib
 import re
 
@@ -11,7 +12,7 @@ GH = ROOT / ".github"
 FILES = {}
 
 # ============ 1. SECURITY.md ============
-FILES[ROOT / "SECURITY.md"] = '''# Security Policy
+FILES[ROOT / "SECURITY.md"] = """# Security Policy
 
 ## Supported versions
 
@@ -62,11 +63,11 @@ In-scope security concerns include:
 After a fix is released, we will publish a CVE-style advisory in the
 [Security tab](https://github.com/syxscott/Paleontology-Research-Skills/security)
 and credit reporters who wish to be acknowledged.
-'''
+"""
 
 
 # ============ 2. CI workflow: tests across Python versions × OS ============
-FILES[GH / "workflows" / "test.yml"] = '''name: Test
+FILES[GH / "workflows" / "test.yml"] = """name: Test
 
 on:
   push:
@@ -121,11 +122,11 @@ jobs:
           python .claude/skills/paleontology-research-skills/paleo-geo-time/scripts/geo_time_query.py --period Jurassic
         env:
           PYTHONIOENCODING: utf-8
-'''
+"""
 
 
 # ============ 3. CI workflow: validate Agent Skills frontmatter ============
-FILES[GH / "workflows" / "validate-skills.yml"] = '''name: Validate Skills
+FILES[GH / "workflows" / "validate-skills.yml"] = """name: Validate Skills
 
 on:
   push:
@@ -197,11 +198,11 @@ jobs:
                   print(f"OK: /{md.stem}")
           sys.exit(0 if all_ok else 1)
           PY
-'''
+"""
 
 
 # ============ 4. CI workflow: lint with ruff (warning only) ============
-FILES[GH / "workflows" / "lint.yml"] = '''name: Lint
+FILES[GH / "workflows" / "lint.yml"] = """name: Lint
 
 on:
   pull_request:
@@ -220,11 +221,11 @@ jobs:
         run: ruff check . --output-format=github || true
       - name: Ruff format check
         run: ruff format --check . || true
-'''
+"""
 
 
 # ============ 5. Issue templates ============
-FILES[GH / "ISSUE_TEMPLATE" / "config.yml"] = '''blank_issues_enabled: false
+FILES[GH / "ISSUE_TEMPLATE" / "config.yml"] = """blank_issues_enabled: false
 contact_links:
   - name: 💬 Question / discussion
     url: https://github.com/syxscott/Paleontology-Research-Skills/discussions
@@ -232,10 +233,10 @@ contact_links:
   - name: 🔒 Security issue
     url: https://github.com/syxscott/Paleontology-Research-Skills/security/advisories/new
     about: For security vulnerabilities, please file a private advisory.
-'''
+"""
 
 
-FILES[GH / "ISSUE_TEMPLATE" / "bug_report.yml"] = '''name: 🐛 Bug report
+FILES[GH / "ISSUE_TEMPLATE" / "bug_report.yml"] = """name: 🐛 Bug report
 description: Something doesn't work as expected.
 title: "[bug] "
 labels: ["bug"]
@@ -328,10 +329,10 @@ body:
     attributes:
       label: Anything else?
       description: Logs, screenshots, related issues, etc.
-'''
+"""
 
 
-FILES[GH / "ISSUE_TEMPLATE" / "feature_request.yml"] = '''name: ✨ Feature request
+FILES[GH / "ISSUE_TEMPLATE" / "feature_request.yml"] = """name: ✨ Feature request
 description: Suggest a new capability or improvement.
 title: "[feat] "
 labels: ["enhancement"]
@@ -376,10 +377,10 @@ body:
     id: extra
     attributes:
       label: Additional context
-'''
+"""
 
 
-FILES[GH / "ISSUE_TEMPLATE" / "skill_request.yml"] = '''name: 🦕 New sub-skill proposal
+FILES[GH / "ISSUE_TEMPLATE" / "skill_request.yml"] = """name: 🦕 New sub-skill proposal
 description: Propose a new sub-skill (e.g. paleo-isotope, paleo-amber, paleo-trace).
 title: "[skill] paleo-<name>: "
 labels: ["enhancement", "new-skill"]
@@ -427,11 +428,11 @@ body:
     id: out_of_scope
     attributes:
       label: When NOT to use this skill
-'''
+"""
 
 
 # ============ 6. PR template ============
-FILES[GH / "PULL_REQUEST_TEMPLATE.md"] = '''## Summary
+FILES[GH / "PULL_REQUEST_TEMPLATE.md"] = """## Summary
 
 <!-- One sentence: what does this PR change? -->
 
@@ -477,11 +478,11 @@ Refs: #
 ```json
 
 ```
-'''
+"""
 
 
 # ============ 7. dependabot config ============
-FILES[GH / "dependabot.yml"] = '''version: 2
+FILES[GH / "dependabot.yml"] = """version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -499,11 +500,11 @@ updates:
     labels:
       - "dependencies"
       - "python"
-'''
+"""
 
 
 # ============ 8. FUNDING.yml (placeholder) ============
-FILES[GH / "FUNDING.yml"] = '''# These links appear under the "Sponsor" button on GitHub.
+FILES[GH / "FUNDING.yml"] = """# These links appear under the "Sponsor" button on GitHub.
 # Uncomment / customise as you create funding accounts.
 
 # github: [syxscott]
@@ -511,7 +512,7 @@ FILES[GH / "FUNDING.yml"] = '''# These links appear under the "Sponsor" button o
 # open_collective: <slug>
 # ko_fi: <username>
 # custom: ["https://yoursite/donate"]
-'''
+"""
 
 
 # Write all files
@@ -534,7 +535,9 @@ CANONICAL_TIMEOUT = 30
 # Patterns to replace
 UA_PATTERNS = [
     re.compile(r'UA = "Paleontology-Research-Skills/1\.0 \(https://paleoclaw\.local; mailto:[^"]+\)"'),
-    re.compile(r'UA = "Paleontology-Research-Skills/1\.0 \(https://paleontology-research-skills\.local; mailto:[^"]+\)"'),
+    re.compile(
+        r'UA = "Paleontology-Research-Skills/1\.0 \(https://paleontology-research-skills\.local; mailto:[^"]+\)"'
+    ),
     re.compile(r'UA = "Paleontology-Research-Skills/1\.0 \(mailto:[^"]+\)"'),
 ]
 
@@ -559,8 +562,8 @@ for py in PARENT.rglob("*.py"):
     )
 
     # Unify TIMEOUT (rename DEFAULT_TIMEOUT → TIMEOUT, value 30)
-    text = re.sub(r'^DEFAULT_TIMEOUT = \d+', f'TIMEOUT = {CANONICAL_TIMEOUT}', text, flags=re.MULTILINE)
-    text = re.sub(r'^TIMEOUT = \d+', f'TIMEOUT = {CANONICAL_TIMEOUT}', text, flags=re.MULTILINE)
+    text = re.sub(r"^DEFAULT_TIMEOUT = \d+", f"TIMEOUT = {CANONICAL_TIMEOUT}", text, flags=re.MULTILINE)
+    text = re.sub(r"^TIMEOUT = \d+", f"TIMEOUT = {CANONICAL_TIMEOUT}", text, flags=re.MULTILINE)
     # Rename uses of DEFAULT_TIMEOUT inside function bodies
     text = text.replace("DEFAULT_TIMEOUT", "TIMEOUT")
 

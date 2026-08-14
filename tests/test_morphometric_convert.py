@@ -1,13 +1,19 @@
 """Tests for paleo-morphometric-convert format parsers and writers."""
-import json
-import os
+
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 _HERE = Path(__file__).resolve().parent
-_SCRIPT_DIR = _HERE.parent / ".claude" / "skills" / "paleontology-research-skills" / "paleo-morphometric-convert" / "scripts"
+_SCRIPT_DIR = (
+    _HERE.parent
+    / ".claude"
+    / "skills"
+    / "paleontology-research-skills"
+    / "paleo-morphometric-convert"
+    / "scripts"
+)
 sys.path.insert(0, str(_SCRIPT_DIR))
 sys.path.insert(0, str(_HERE.parent / ".claude" / "skills" / "paleontology-research-skills" / "scripts"))
 
@@ -15,7 +21,6 @@ import convert  # noqa: E402
 
 
 class TestTpsParser(unittest.TestCase):
-
     def test_single_specimen(self):
         text = "LM=3\n1.0 2.0\n3.0 4.0\n5.0 6.0\nID=spec1\nSCALE=1.5\n"
         result = convert._parse_tps(text)
@@ -28,8 +33,7 @@ class TestTpsParser(unittest.TestCase):
         self.assertEqual(s["landmarks"][2]["y"], 6.0)
 
     def test_multi_specimen(self):
-        text = ("LM=2\n1.0 2.0\n3.0 4.0\nID=a\nSCALE=1.0\n\n"
-                "LM=2\n5.0 6.0\n7.0 8.0\nID=b\nSCALE=2.0\n")
+        text = "LM=2\n1.0 2.0\n3.0 4.0\nID=a\nSCALE=1.0\n\nLM=2\n5.0 6.0\n7.0 8.0\nID=b\nSCALE=2.0\n"
         result = convert._parse_tps(text)
         self.assertEqual(len(result), 2)
         self.assertEqual(result[0]["specimen_id"], "a")
@@ -42,12 +46,13 @@ class TestTpsParser(unittest.TestCase):
 
 
 class TestCsvParser(unittest.TestCase):
-
     def test_long_format(self):
-        text = ("specimen_id,landmark_id,x,y,type,name\n"
-                "a,1,1.0,2.0,semilandmark,LM01\n"
-                "a,2,3.0,4.0,semilandmark,LM02\n"
-                "b,1,5.0,6.0,fixed,APEX\n")
+        text = (
+            "specimen_id,landmark_id,x,y,type,name\n"
+            "a,1,1.0,2.0,semilandmark,LM01\n"
+            "a,2,3.0,4.0,semilandmark,LM02\n"
+            "b,1,5.0,6.0,fixed,APEX\n"
+        )
         result = convert._parse_csv(text)
         self.assertEqual(len(result), 2)
         names = {s["specimen_id"] for s in result}
@@ -62,19 +67,20 @@ class TestCsvParser(unittest.TestCase):
 
 
 class TestRoundTrip(unittest.TestCase):
-
     def test_tps_csv_tps(self):
-        original = [{
-            "specimen_id": "spec1",
-            "scale": 1.0,
-            "image_path": None,
-            "num_landmarks": 3,
-            "landmarks": [
-                {"id": 1, "x": 1.0, "y": 2.0, "type": "semilandmark", "name": "LM01"},
-                {"id": 2, "x": 3.0, "y": 4.0, "type": "semilandmark", "name": "LM02"},
-                {"id": 3, "x": 5.0, "y": 6.0, "type": "semilandmark", "name": "LM03"},
-            ],
-        }]
+        original = [
+            {
+                "specimen_id": "spec1",
+                "scale": 1.0,
+                "image_path": None,
+                "num_landmarks": 3,
+                "landmarks": [
+                    {"id": 1, "x": 1.0, "y": 2.0, "type": "semilandmark", "name": "LM01"},
+                    {"id": 2, "x": 3.0, "y": 4.0, "type": "semilandmark", "name": "LM02"},
+                    {"id": 3, "x": 5.0, "y": 6.0, "type": "semilandmark", "name": "LM03"},
+                ],
+            }
+        ]
         with tempfile.TemporaryDirectory() as td:
             tps_path = Path(td) / "a.tps"
             csv_path = Path(td) / "a.csv"
@@ -91,7 +97,6 @@ class TestRoundTrip(unittest.TestCase):
 
 
 class TestValidation(unittest.TestCase):
-
     def test_all_same_count(self):
         specimens = [
             {"specimen_id": "a", "landmarks": [{"id": 1, "x": 0, "y": 0}] * 5},

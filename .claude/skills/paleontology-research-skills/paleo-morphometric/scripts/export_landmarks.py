@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Re-export an existing landmarks JSON file to TPS / CSV / Excel."""
+
 from __future__ import annotations
 
 import argparse
@@ -23,8 +24,7 @@ def main(argv=None):
     p = argparse.ArgumentParser(description="Re-export a landmarks JSON to other formats")
     p.add_argument("--input", required=True, help="Landmarks JSON file")
     p.add_argument("--out-dir", default="morphometric_converted")
-    p.add_argument("--format", default="tps,csv,xlsx",
-                   help="Comma-separated: tps,csv,xlsx,json")
+    p.add_argument("--format", default="tps,csv,xlsx", help="Comma-separated: tps,csv,xlsx,json")
     args = p.parse_args(argv)
 
     src = Path(args.input)
@@ -38,14 +38,19 @@ def main(argv=None):
         print_json({"error": f"Failed to read JSON: {e}"})
         return
 
-    written, errors = export(payload, args.out_dir,
-                             [f.strip().lower() for f in args.format.split(",")],
-                             payload.get("specimen_id") or src.stem)
-    print_json({
-        "input": str(src),
-        "files_written": written,
-        "errors": errors,
-    })
+    written, errors = export(
+        payload,
+        args.out_dir,
+        [f.strip().lower() for f in args.format.split(",")],
+        payload.get("specimen_id") or src.stem,
+    )
+    print_json(
+        {
+            "input": str(src),
+            "files_written": written,
+            "errors": errors,
+        }
+    )
 
 
 if __name__ == "__main__":

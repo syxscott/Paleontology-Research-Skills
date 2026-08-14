@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Search across all sessions using hashing-trick vector similarity."""
+
 from __future__ import annotations
 
 import argparse
@@ -13,8 +14,11 @@ if _SHARED not in sys.path:
     sys.path.insert(0, _SHARED)
 
 from paleo_common import (  # noqa: E402
-    sessions_root, read_json, print_json,
-    hashing_vector, cosine_similarity,
+    cosine_similarity,
+    hashing_vector,
+    print_json,
+    read_json,
+    sessions_root,
 )
 
 
@@ -68,15 +72,17 @@ def main(argv=None):
             continue
         score = cosine_similarity(qvec, hashing_vector(text))
         if score >= args.min_score:
-            hits.append({
-                "session_id": s.get("session_id") or f.stem,
-                "title": s.get("title"),
-                "ended_at": s.get("ended_at"),
-                "topic_tags": s.get("topic_tags") or [],
-                "score": round(score, 4),
-                "matched_snippets": _snippets(text, args.query),
-                "file": str(f),
-            })
+            hits.append(
+                {
+                    "session_id": s.get("session_id") or f.stem,
+                    "title": s.get("title"),
+                    "ended_at": s.get("ended_at"),
+                    "topic_tags": s.get("topic_tags") or [],
+                    "score": round(score, 4),
+                    "matched_snippets": _snippets(text, args.query),
+                    "file": str(f),
+                }
+            )
     hits.sort(key=lambda x: x["score"], reverse=True)
     hits = hits[: max(1, args.top_k)]
     print_json({"query": args.query, "count": len(hits), "results": hits, "sessionsRoot": str(root)})

@@ -3,6 +3,17 @@ description: Convert morphometric landmark data between TPS, CSV, JSON, Excel, N
 argument-hint: <input-file> <to-format> [out-path]
 allowed-tools: Bash, Read
 ---
+Before running any script, resolve the toolkit root (supports both
+**user-level** install at `~/.claude/skills/` and **project-level** install at
+`.claude/skills/`):
+
+```bash
+if [ -d "$HOME/.claude/skills/paleontology-research-skills" ]; then
+  PRS="$HOME/.claude/skills/paleontology-research-skills"
+else
+  PRS=".claude/skills/paleontology-research-skills"
+fi
+```
 
 The user wants to convert a morphometric landmark dataset between formats.
 Use the **paleo-morphometric-convert** skill:
@@ -15,7 +26,7 @@ Procedure:
    (`tps`, `csv`, `json`, `nts`, `xlsx`).
 2. Run:
    ```bash
-   python3 .claude/skills/paleontology-research-skills/paleo-morphometric-convert/scripts/convert.py \
+   python3 "$PRS"/paleo-morphometric-convert/scripts/convert.py \
        --input "<INPUT>" \
        --to <FORMAT> \
        --out "<OUTPUT or default>"

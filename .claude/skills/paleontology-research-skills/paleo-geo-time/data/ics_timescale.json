@@ -2,61 +2,478 @@
   "version": "2023-09",
   "source": "International Commission on Stratigraphy (ICS) — https://stratigraphy.org",
   "note": "Ages in Ma (Mega-annum, millions of years ago). startMa is older, endMa is younger (or present for ongoing).",
-  "eonotheMs": [
-    {"id": "phanerozoic", "name": "Phanerozoic", "nameEn": "Phanerozoic", "startMa": 538.8, "endMa": 0.0, "rank": "eonothem"},
-    {"id": "proterozoic", "name": "Proterozoic", "nameEn": "Proterozoic", "startMa": 2500.0, "endMa": 538.8, "rank": "eonothem"},
-    {"id": "archean", "name": "Archean", "nameEn": "Archean", "startMa": 4000.0, "endMa": 2500.0, "rank": "eonothem"},
-    {"id": "hadean", "name": "Hadean", "nameEn": "Hadean", "startMa": 4540.0, "endMa": 4000.0, "rank": "eonothem"}
-  ],
   "eras": [
-    {"id": "cenozoic", "name": "Cenozoic", "nameEn": "Cenozoic", "startMa": 66.0, "endMa": 0.0, "eonothem": "phanerozoic"},
-    {"id": "mesozoic", "name": "Mesozoic", "nameEn": "Mesozoic", "startMa": 251.902, "endMa": 66.0, "eonothem": "phanerozoic"},
-    {"id": "paleozoic", "name": "Paleozoic", "nameEn": "Paleozoic", "startMa": 538.8, "endMa": 251.902, "eonothem": "phanerozoic"}
+    {
+      "id": "cenozoic",
+      "name": "Cenozoic",
+      "nameEn": "Cenozoic",
+      "startMa": 66.0,
+      "endMa": 0.0,
+      "eonothem": "phanerozoic"
+    },
+    {
+      "id": "mesozoic",
+      "name": "Mesozoic",
+      "nameEn": "Mesozoic",
+      "startMa": 251.902,
+      "endMa": 66.0,
+      "eonothem": "phanerozoic"
+    },
+    {
+      "id": "paleozoic",
+      "name": "Paleozoic",
+      "nameEn": "Paleozoic",
+      "startMa": 538.8,
+      "endMa": 251.902,
+      "eonothem": "phanerozoic"
+    }
   ],
   "periods": [
-    {"id": "quaternary", "name": "Quaternary", "nameEn": "Quaternary", "startMa": 2.58, "endMa": 0.0, "era": "cenozoic", "commonFossils": ["Megafauna", "Homo sapiens", "Mammuthus"]},
-    {"id": "neogene", "name": "Neogene", "nameEn": "Neogene", "startMa": 23.03, "endMa": 2.58, "era": "cenozoic", "commonFossils": ["Mammalia diversification"]},
-    {"id": "paleogene", "name": "Paleogene", "nameEn": "Paleogene", "startMa": 66.0, "endMa": 23.03, "era": "cenozoic", "commonFossils": ["Early mammals", "Titanoboa"]},
-    {"id": "cretaceous", "name": "Cretaceous", "nameEn": "Cretaceous", "startMa": 145.0, "endMa": 66.0, "era": "mesozoic", "commonFossils": ["Tyrannosaurus", "Triceratops", "Velociraptor", "Mosasaurus", "Ammonoidea"]},
-    {"id": "jurassic", "name": "Jurassic", "nameEn": "Jurassic", "startMa": 201.4, "endMa": 145.0, "era": "mesozoic", "commonFossils": ["Allosaurus", "Brachiosaurus", "Stegosaurus", "Archaeopteryx", "Ichthyosauria"]},
-    {"id": "triassic", "name": "Triassic", "nameEn": "Triassic", "startMa": 251.902, "endMa": 201.4, "era": "mesozoic", "commonFossils": ["Early dinosaurs", "Coelophysis", "Ichthyosauria", "Cynodontia"]},
-    {"id": "permian", "name": "Permian", "nameEn": "Permian", "startMa": 298.9, "endMa": 251.902, "era": "paleozoic", "commonFossils": ["Dimetrodon", "Lystrosaurus", "Glossopteris"]},
-    {"id": "carboniferous", "name": "Carboniferous", "nameEn": "Carboniferous", "startMa": 358.9, "endMa": 298.9, "era": "paleozoic", "commonFossils": ["Meganeura", "Edaphosaurus", "Lepidodendron"]},
-    {"id": "devonian", "name": "Devonian", "nameEn": "Devonian", "startMa": 419.2, "endMa": 358.9, "era": "paleozoic", "commonFossils": ["Dunkleosteus", "Tiktaalik", "Eurypterida"]},
-    {"id": "silurian", "name": "Silurian", "nameEn": "Silurian", "startMa": 443.8, "endMa": 419.2, "era": "paleozoic", "commonFossils": ["Cooksonia", "Eurypterida"]},
-    {"id": "ordovician", "name": "Ordovician", "nameEn": "Ordovician", "startMa": 485.4, "endMa": 443.8, "era": "paleozoic", "commonFossils": ["Trilobita", "Graptolithina", "Nautiloidea"]},
-    {"id": "cambrian", "name": "Cambrian", "nameEn": "Cambrian", "startMa": 538.8, "endMa": 485.4, "era": "paleozoic", "commonFossils": ["Trilobita", "Anomalocaris", "Hallucigenia", "Eldonia"]}
+    {
+      "id": "quaternary",
+      "name": "Quaternary",
+      "nameEn": "Quaternary",
+      "startMa": 2.58,
+      "endMa": 0.0,
+      "era": "cenozoic",
+      "commonFossils": [
+        "Megafauna",
+        "Homo sapiens",
+        "Mammuthus"
+      ]
+    },
+    {
+      "id": "neogene",
+      "name": "Neogene",
+      "nameEn": "Neogene",
+      "startMa": 23.03,
+      "endMa": 2.58,
+      "era": "cenozoic",
+      "commonFossils": [
+        "Mammalia diversification"
+      ]
+    },
+    {
+      "id": "paleogene",
+      "name": "Paleogene",
+      "nameEn": "Paleogene",
+      "startMa": 66.0,
+      "endMa": 23.03,
+      "era": "cenozoic",
+      "commonFossils": [
+        "Early mammals",
+        "Titanoboa"
+      ]
+    },
+    {
+      "id": "cretaceous",
+      "name": "Cretaceous",
+      "nameEn": "Cretaceous",
+      "startMa": 145.0,
+      "endMa": 66.0,
+      "era": "mesozoic",
+      "commonFossils": [
+        "Tyrannosaurus",
+        "Triceratops",
+        "Velociraptor",
+        "Mosasaurus",
+        "Ammonoidea"
+      ]
+    },
+    {
+      "id": "jurassic",
+      "name": "Jurassic",
+      "nameEn": "Jurassic",
+      "startMa": 201.4,
+      "endMa": 145.0,
+      "era": "mesozoic",
+      "commonFossils": [
+        "Allosaurus",
+        "Brachiosaurus",
+        "Stegosaurus",
+        "Archaeopteryx",
+        "Ichthyosauria"
+      ]
+    },
+    {
+      "id": "triassic",
+      "name": "Triassic",
+      "nameEn": "Triassic",
+      "startMa": 251.902,
+      "endMa": 201.4,
+      "era": "mesozoic",
+      "commonFossils": [
+        "Early dinosaurs",
+        "Coelophysis",
+        "Ichthyosauria",
+        "Cynodontia"
+      ]
+    },
+    {
+      "id": "permian",
+      "name": "Permian",
+      "nameEn": "Permian",
+      "startMa": 298.9,
+      "endMa": 251.902,
+      "era": "paleozoic",
+      "commonFossils": [
+        "Dimetrodon",
+        "Lystrosaurus",
+        "Glossopteris"
+      ]
+    },
+    {
+      "id": "carboniferous",
+      "name": "Carboniferous",
+      "nameEn": "Carboniferous",
+      "startMa": 358.9,
+      "endMa": 298.9,
+      "era": "paleozoic",
+      "commonFossils": [
+        "Meganeura",
+        "Edaphosaurus",
+        "Lepidodendron"
+      ]
+    },
+    {
+      "id": "devonian",
+      "name": "Devonian",
+      "nameEn": "Devonian",
+      "startMa": 419.2,
+      "endMa": 358.9,
+      "era": "paleozoic",
+      "commonFossils": [
+        "Dunkleosteus",
+        "Tiktaalik",
+        "Eurypterida"
+      ]
+    },
+    {
+      "id": "silurian",
+      "name": "Silurian",
+      "nameEn": "Silurian",
+      "startMa": 443.8,
+      "endMa": 419.2,
+      "era": "paleozoic",
+      "commonFossils": [
+        "Cooksonia",
+        "Eurypterida"
+      ]
+    },
+    {
+      "id": "ordovician",
+      "name": "Ordovician",
+      "nameEn": "Ordovician",
+      "startMa": 485.4,
+      "endMa": 443.8,
+      "era": "paleozoic",
+      "commonFossils": [
+        "Trilobita",
+        "Graptolithina",
+        "Nautiloidea"
+      ]
+    },
+    {
+      "id": "cambrian",
+      "name": "Cambrian",
+      "nameEn": "Cambrian",
+      "startMa": 538.8,
+      "endMa": 485.4,
+      "era": "paleozoic",
+      "commonFossils": [
+        "Trilobita",
+        "Anomalocaris",
+        "Hallucigenia",
+        "Eldonia"
+      ]
+    }
   ],
   "epochs": [
-    {"id": "holocene", "name": "Holocene", "nameEn": "Holocene", "startMa": 0.0117, "endMa": 0.0, "period": "quaternary"},
-    {"id": "pleistocene", "name": "Pleistocene", "nameEn": "Pleistocene", "startMa": 2.58, "endMa": 0.0117, "period": "quaternary", "commonFossils": ["Mammuthus", "Smilodon", "Homo erectus"]},
-    {"id": "pliocene", "name": "Pliocene", "nameEn": "Pliocene", "startMa": 5.333, "endMa": 2.58, "period": "neogene"},
-    {"id": "miocene", "name": "Miocene", "nameEn": "Miocene", "startMa": 23.03, "endMa": 5.333, "period": "neogene", "commonFossils": ["Megalodon"]},
-    {"id": "oligocene", "name": "Oligocene", "nameEn": "Oligocene", "startMa": 33.9, "endMa": 23.03, "period": "paleogene"},
-    {"id": "eocene", "name": "Eocene", "nameEn": "Eocene", "startMa": 56.0, "endMa": 33.9, "period": "paleogene", "commonFossils": ["Basilosaurus", "Megistotherium"]},
-    {"id": "paleocene", "name": "Paleocene", "nameEn": "Paleocene", "startMa": 66.0, "endMa": 56.0, "period": "paleogene"},
-    {"id": "maastrichtian", "name": "Maastrichtian", "nameEn": "Maastrichtian", "startMa": 72.1, "endMa": 66.0, "period": "cretaceous"},
-    {"id": "campanian", "name": "Campanian", "nameEn": "Campanian", "startMa": 83.6, "endMa": 72.1, "period": "cretaceous"},
-    {"id": "santonian", "name": "Santonian", "nameEn": "Santonian", "startMa": 86.3, "endMa": 83.6, "period": "cretaceous"},
-    {"id": "coniacian", "name": "Coniacian", "nameEn": "Coniacian", "startMa": 89.8, "endMa": 86.3, "period": "cretaceous"},
-    {"id": "turonian", "name": "Turonian", "nameEn": "Turonian", "startMa": 93.9, "endMa": 89.8, "period": "cretaceous"},
-    {"id": "cenomanian", "name": "Cenomanian", "nameEn": "Cenomanian", "startMa": 100.5, "endMa": 93.9, "period": "cretaceous"},
-    {"id": "albian", "name": "Albian", "nameEn": "Albian", "startMa": 113.0, "endMa": 100.5, "period": "cretaceous"},
-    {"id": "aptian", "name": "Aptian", "nameEn": "Aptian", "startMa": 121.4, "endMa": 113.0, "period": "cretaceous"},
-    {"id": "barremian", "name": "Barremian", "nameEn": "Barremian", "startMa": 125.77, "endMa": 121.4, "period": "cretaceous"},
-    {"id": "hauterivian", "name": "Hauterivian", "nameEn": "Hauterivian", "startMa": 132.6, "endMa": 125.77, "period": "cretaceous"},
-    {"id": "valanginian", "name": "Valanginian", "nameEn": "Valanginian", "startMa": 139.8, "endMa": 132.6, "period": "cretaceous"},
-    {"id": "berriasian", "name": "Berriasian", "nameEn": "Berriasian", "startMa": 145.0, "endMa": 139.8, "period": "cretaceous"},
-    {"id": "tithonian", "name": "Tithonian", "nameEn": "Tithonian", "startMa": 149.2, "endMa": 145.0, "period": "jurassic"},
-    {"id": "kimmeridgian", "name": "Kimmeridgian", "nameEn": "Kimmeridgian", "startMa": 154.8, "endMa": 149.2, "period": "jurassic"},
-    {"id": "oxfordian", "name": "Oxfordian", "nameEn": "Oxfordian", "startMa": 161.5, "endMa": 154.8, "period": "jurassic"},
-    {"id": "callovian", "name": "Callovian", "nameEn": "Callovian", "startMa": 165.3, "endMa": 161.5, "period": "jurassic"},
-    {"id": "bathonian", "name": "Bathonian", "nameEn": "Bathonian", "startMa": 168.2, "endMa": 165.3, "period": "jurassic"},
-    {"id": "bajocian", "name": "Bajocian", "nameEn": "Bajocian", "startMa": 170.9, "endMa": 168.2, "period": "jurassic"},
-    {"id": "aalenian", "name": "Aalenian", "nameEn": "Aalenian", "startMa": 174.7, "endMa": 170.9, "period": "jurassic"},
-    {"id": "toarcian", "name": "Toarcian", "nameEn": "Toarcian", "startMa": 184.2, "endMa": 174.7, "period": "jurassic"},
-    {"id": "pliensbachian", "name": "Pliensbachian", "nameEn": "Pliensbachian", "startMa": 192.9, "endMa": 184.2, "period": "jurassic"},
-    {"id": "sinemurian", "name": "Sinemurian", "nameEn": "Sinemurian", "startMa": 199.5, "endMa": 192.9, "period": "jurassic"},
-    {"id": "hettangian", "name": "Hettangian", "nameEn": "Hettangian", "startMa": 201.4, "endMa": 199.5, "period": "jurassic"}
+    {
+      "id": "holocene",
+      "name": "Holocene",
+      "nameEn": "Holocene",
+      "startMa": 0.0117,
+      "endMa": 0.0,
+      "period": "quaternary"
+    },
+    {
+      "id": "pleistocene",
+      "name": "Pleistocene",
+      "nameEn": "Pleistocene",
+      "startMa": 2.58,
+      "endMa": 0.0117,
+      "period": "quaternary",
+      "commonFossils": [
+        "Mammuthus",
+        "Smilodon",
+        "Homo erectus"
+      ]
+    },
+    {
+      "id": "pliocene",
+      "name": "Pliocene",
+      "nameEn": "Pliocene",
+      "startMa": 5.333,
+      "endMa": 2.58,
+      "period": "neogene"
+    },
+    {
+      "id": "miocene",
+      "name": "Miocene",
+      "nameEn": "Miocene",
+      "startMa": 23.03,
+      "endMa": 5.333,
+      "period": "neogene",
+      "commonFossils": [
+        "Megalodon"
+      ]
+    },
+    {
+      "id": "oligocene",
+      "name": "Oligocene",
+      "nameEn": "Oligocene",
+      "startMa": 33.9,
+      "endMa": 23.03,
+      "period": "paleogene"
+    },
+    {
+      "id": "eocene",
+      "name": "Eocene",
+      "nameEn": "Eocene",
+      "startMa": 56.0,
+      "endMa": 33.9,
+      "period": "paleogene",
+      "commonFossils": [
+        "Basilosaurus",
+        "Megistotherium"
+      ]
+    },
+    {
+      "id": "paleocene",
+      "name": "Paleocene",
+      "nameEn": "Paleocene",
+      "startMa": 66.0,
+      "endMa": 56.0,
+      "period": "paleogene"
+    },
+    {
+      "id": "maastrichtian",
+      "name": "Maastrichtian",
+      "nameEn": "Maastrichtian",
+      "startMa": 72.1,
+      "endMa": 66.0,
+      "period": "cretaceous"
+    },
+    {
+      "id": "campanian",
+      "name": "Campanian",
+      "nameEn": "Campanian",
+      "startMa": 83.6,
+      "endMa": 72.1,
+      "period": "cretaceous"
+    },
+    {
+      "id": "santonian",
+      "name": "Santonian",
+      "nameEn": "Santonian",
+      "startMa": 86.3,
+      "endMa": 83.6,
+      "period": "cretaceous"
+    },
+    {
+      "id": "coniacian",
+      "name": "Coniacian",
+      "nameEn": "Coniacian",
+      "startMa": 89.8,
+      "endMa": 86.3,
+      "period": "cretaceous"
+    },
+    {
+      "id": "turonian",
+      "name": "Turonian",
+      "nameEn": "Turonian",
+      "startMa": 93.9,
+      "endMa": 89.8,
+      "period": "cretaceous"
+    },
+    {
+      "id": "cenomanian",
+      "name": "Cenomanian",
+      "nameEn": "Cenomanian",
+      "startMa": 100.5,
+      "endMa": 93.9,
+      "period": "cretaceous"
+    },
+    {
+      "id": "albian",
+      "name": "Albian",
+      "nameEn": "Albian",
+      "startMa": 113.0,
+      "endMa": 100.5,
+      "period": "cretaceous"
+    },
+    {
+      "id": "aptian",
+      "name": "Aptian",
+      "nameEn": "Aptian",
+      "startMa": 121.4,
+      "endMa": 113.0,
+      "period": "cretaceous"
+    },
+    {
+      "id": "barremian",
+      "name": "Barremian",
+      "nameEn": "Barremian",
+      "startMa": 125.77,
+      "endMa": 121.4,
+      "period": "cretaceous"
+    },
+    {
+      "id": "hauterivian",
+      "name": "Hauterivian",
+      "nameEn": "Hauterivian",
+      "startMa": 132.6,
+      "endMa": 125.77,
+      "period": "cretaceous"
+    },
+    {
+      "id": "valanginian",
+      "name": "Valanginian",
+      "nameEn": "Valanginian",
+      "startMa": 139.8,
+      "endMa": 132.6,
+      "period": "cretaceous"
+    },
+    {
+      "id": "berriasian",
+      "name": "Berriasian",
+      "nameEn": "Berriasian",
+      "startMa": 145.0,
+      "endMa": 139.8,
+      "period": "cretaceous"
+    },
+    {
+      "id": "tithonian",
+      "name": "Tithonian",
+      "nameEn": "Tithonian",
+      "startMa": 149.2,
+      "endMa": 145.0,
+      "period": "jurassic"
+    },
+    {
+      "id": "kimmeridgian",
+      "name": "Kimmeridgian",
+      "nameEn": "Kimmeridgian",
+      "startMa": 154.8,
+      "endMa": 149.2,
+      "period": "jurassic"
+    },
+    {
+      "id": "oxfordian",
+      "name": "Oxfordian",
+      "nameEn": "Oxfordian",
+      "startMa": 161.5,
+      "endMa": 154.8,
+      "period": "jurassic"
+    },
+    {
+      "id": "callovian",
+      "name": "Callovian",
+      "nameEn": "Callovian",
+      "startMa": 165.3,
+      "endMa": 161.5,
+      "period": "jurassic"
+    },
+    {
+      "id": "bathonian",
+      "name": "Bathonian",
+      "nameEn": "Bathonian",
+      "startMa": 168.2,
+      "endMa": 165.3,
+      "period": "jurassic"
+    },
+    {
+      "id": "bajocian",
+      "name": "Bajocian",
+      "nameEn": "Bajocian",
+      "startMa": 170.9,
+      "endMa": 168.2,
+      "period": "jurassic"
+    },
+    {
+      "id": "aalenian",
+      "name": "Aalenian",
+      "nameEn": "Aalenian",
+      "startMa": 174.7,
+      "endMa": 170.9,
+      "period": "jurassic"
+    },
+    {
+      "id": "toarcian",
+      "name": "Toarcian",
+      "nameEn": "Toarcian",
+      "startMa": 184.2,
+      "endMa": 174.7,
+      "period": "jurassic"
+    },
+    {
+      "id": "pliensbachian",
+      "name": "Pliensbachian",
+      "nameEn": "Pliensbachian",
+      "startMa": 192.9,
+      "endMa": 184.2,
+      "period": "jurassic"
+    },
+    {
+      "id": "sinemurian",
+      "name": "Sinemurian",
+      "nameEn": "Sinemurian",
+      "startMa": 199.5,
+      "endMa": 192.9,
+      "period": "jurassic"
+    },
+    {
+      "id": "hettangian",
+      "name": "Hettangian",
+      "nameEn": "Hettangian",
+      "startMa": 201.4,
+      "endMa": 199.5,
+      "period": "jurassic"
+    }
+  ],
+  "eonothems": [
+    {
+      "id": "phanerozoic",
+      "name": "Phanerozoic",
+      "nameEn": "Phanerozoic",
+      "startMa": 538.8,
+      "endMa": 0.0,
+      "rank": "eonothem"
+    },
+    {
+      "id": "proterozoic",
+      "name": "Proterozoic",
+      "nameEn": "Proterozoic",
+      "startMa": 2500.0,
+      "endMa": 538.8,
+      "rank": "eonothem"
+    },
+    {
+      "id": "archean",
+      "name": "Archean",
+      "nameEn": "Archean",
+      "startMa": 4000.0,
+      "endMa": 2500.0,
+      "rank": "eonothem"
+    },
+    {
+      "id": "hadean",
+      "name": "Hadean",
+      "nameEn": "Hadean",
+      "startMa": 4540.0,
+      "endMa": 4000.0,
+      "rank": "eonothem"
+    }
   ]
 }

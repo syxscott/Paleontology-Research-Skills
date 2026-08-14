@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Cross-reference a taxon name with NCBI Taxonomy (for modern relatives)."""
+
 from __future__ import annotations
 
 import argparse
@@ -74,11 +75,13 @@ def fetch_lineage(tax_id):
     lineage_ex = taxon.find("LineageEx")
     if lineage_ex is not None:
         for tx in lineage_ex.findall("Taxon"):
-            out["lineage_ranks"].append({
-                "tax_id": (tx.findtext("TaxId") or "").strip(),
-                "name": (tx.findtext("ScientificName") or "").strip(),
-                "rank": (tx.findtext("Rank") or "").strip(),
-            })
+            out["lineage_ranks"].append(
+                {
+                    "tax_id": (tx.findtext("TaxId") or "").strip(),
+                    "name": (tx.findtext("ScientificName") or "").strip(),
+                    "rank": (tx.findtext("Rank") or "").strip(),
+                }
+            )
     common = taxon.find("OtherNames/CommonName")
     if common is not None and common.text:
         out["common_name"] = common.text.strip()
@@ -95,12 +98,14 @@ def main(argv=None):
         print_json({"error": err, "name": args.name})
         return
     if not ids:
-        print_json({
-            "source": "NCBI Taxonomy",
-            "query": {"name": args.name},
-            "matches": [],
-            "note": "No NCBI taxon found. This is normal for extinct-only taxa (most fossils).",
-        })
+        print_json(
+            {
+                "source": "NCBI Taxonomy",
+                "query": {"name": args.name},
+                "matches": [],
+                "note": "No NCBI taxon found. This is normal for extinct-only taxa (most fossils).",
+            }
+        )
         return
 
     results = []
@@ -111,12 +116,14 @@ def main(argv=None):
         else:
             results.append(info)
 
-    print_json({
-        "source": "NCBI Taxonomy",
-        "query": {"name": args.name},
-        "count": len(results),
-        "matches": results,
-    })
+    print_json(
+        {
+            "source": "NCBI Taxonomy",
+            "query": {"name": args.name},
+            "count": len(results),
+            "matches": results,
+        }
+    )
 
 
 if __name__ == "__main__":

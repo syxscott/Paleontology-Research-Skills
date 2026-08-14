@@ -6,6 +6,7 @@ API docs: https://api.semanticscholar.org/graph/v1
 - Returns up to 100 results per request
 - Provides citation counts, influential citations, references
 """
+
 from __future__ import annotations
 
 import argparse
@@ -21,7 +22,7 @@ _SHARED = os.path.normpath(os.path.join(_HERE, "..", "..", "scripts"))
 if _SHARED not in sys.path:
     sys.path.insert(0, _SHARED)
 
-from paleo_common import print_json, load_profile  # noqa: E402
+from paleo_common import load_profile, print_json  # noqa: E402
 
 S2_SEARCH = "https://api.semanticscholar.org/graph/v1/paper/search"
 S2_PAPER = "https://api.semanticscholar.org/graph/v1/paper"
@@ -84,8 +85,7 @@ def main(argv=None):
     p = argparse.ArgumentParser(description="Search Semantic Scholar for papers")
     p.add_argument("--query", required=True)
     p.add_argument("--limit", type=int, default=10, help="1..100")
-    p.add_argument("--min-citations", type=int, default=None,
-                   help="Only return papers with >= N citations")
+    p.add_argument("--min-citations", type=int, default=None, help="Only return papers with >= N citations")
     p.add_argument("--year", help="Year or range: 2020 | 2018-2022 | 2020-")
     p.add_argument("--field", help="Restrict to fieldsOfStudy, e.g. 'Geology' or 'Biology'")
     p.add_argument("--include-abstract", action="store_true")
@@ -118,13 +118,15 @@ def main(argv=None):
         for it in items:
             it.pop("abstract", None)
 
-    print_json({
-        "source": "Semantic Scholar",
-        "query": args.query,
-        "total_results": data.get("total"),
-        "count": len(items),
-        "items": items,
-    })
+    print_json(
+        {
+            "source": "Semantic Scholar",
+            "query": args.query,
+            "total_results": data.get("total"),
+            "count": len(items),
+            "items": items,
+        }
+    )
 
 
 if __name__ == "__main__":

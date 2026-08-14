@@ -3,6 +3,17 @@ description: Aggregate Chinese paleontology / fossil-discovery news
 argument-hint: [keyword] [source=nkocs|palaeontology|ivpp|all]
 allowed-tools: Bash, Read
 ---
+Before running any script, resolve the toolkit root (supports both
+**user-level** install at `~/.claude/skills/` and **project-level** install at
+`.claude/skills/`):
+
+```bash
+if [ -d "$HOME/.claude/skills/paleontology-research-skills" ]; then
+  PRS="$HOME/.claude/skills/paleontology-research-skills"
+else
+  PRS=".claude/skills/paleontology-research-skills"
+fi
+```
 
 The user wants Chinese-language paleontology news. Use the
 **paleo-china-news** skill:
@@ -14,7 +25,7 @@ Procedure:
 1. Parse $ARGUMENTS — optional keyword filter and optional source restriction.
 2. Run:
    ```bash
-   python3 .claude/skills/paleontology-research-skills/paleo-china-news/scripts/china_news_fetch.py \
+   python3 "$PRS"/paleo-china-news/scripts/china_news_fetch.py \
        --limit 10 \
        [--keyword "<KW>"] \
        [--source <SRC>] \

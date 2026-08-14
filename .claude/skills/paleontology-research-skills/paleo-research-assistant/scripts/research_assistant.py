@@ -8,6 +8,7 @@ Calls (in order):
   4. paleo-pbdb/scripts/pbdb_query.py
   5. paleo-stratigraphy/scripts/stratigraphy_query.py
 """
+
 from __future__ import annotations
 
 import argparse
@@ -44,17 +45,20 @@ def _run(script_rel, args, timeout=60):
     env.setdefault("PYTHONIOENCODING", "utf-8")
     try:
         r = subprocess.run(
-            cmd, capture_output=True, text=True,
-            encoding="utf-8", errors="replace",
-            timeout=timeout, env=env,
+            cmd,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=timeout,
+            env=env,
         )
     except subprocess.TimeoutExpired:
         return {"error": f"Sub-script timed out: {script.name}", "command": cmd}
     except (OSError, subprocess.SubprocessError) as e:
         return {"error": str(e), "command": cmd}
     if r.returncode != 0:
-        return {"error": f"Sub-script failed (code {r.returncode})",
-                "stderr": (r.stderr or "")[:300]}
+        return {"error": f"Sub-script failed (code {r.returncode})", "stderr": (r.stderr or "")[:300]}
     try:
         return json.loads(r.stdout) if r.stdout else {"error": "empty output"}
     except json.JSONDecodeError:
@@ -86,17 +90,21 @@ def _render_report(state):
     md = []
     md.append(f"# Research Report — {topic}\n")
     md.append(f"**Generated**: {now}  ")
-    md.append(f"**By**: `paleo-research-assistant` (paleontology-research-skills v1.0)\n")
-    if taxon: md.append(f"**Target taxon**: *{taxon}*  ")
-    if formation: md.append(f"**Target formation**: {formation}\n")
+    md.append("**By**: `paleo-research-assistant` (paleontology-research-skills v1.0)\n")
+    if taxon:
+        md.append(f"**Target taxon**: *{taxon}*  ")
+    if formation:
+        md.append(f"**Target formation**: {formation}\n")
     md.append("\n---\n")
 
     # 1. Overview
     md.append("## 1. Overview\n")
-    md.append(f"_This report compiles primary-source data on **{topic}** from the "
-              "Paleobiology Database (PBDB), CrossRef, and (optionally) "
-              "Macrostrat, Semantic Scholar, and arXiv. All findings below are "
-              "machine-extracted and should be reviewed before scientific use._\n")
+    md.append(
+        f"_This report compiles primary-source data on **{topic}** from the "
+        "Paleobiology Database (PBDB), CrossRef, and (optionally) "
+        "Macrostrat, Semantic Scholar, and arXiv. All findings below are "
+        "machine-extracted and should be reviewed before scientific use._\n"
+    )
 
     # 2. Literature
     md.append("\n## 2. Literature (CrossRef)\n")
@@ -130,7 +138,9 @@ def _render_report(state):
         md.append(f"_Lookup failed: {tax.get('error') if tax else 'no data'}_\n")
     else:
         t = tax.get("taxon") or {}
-        md.append(f"**Taxon**: *{t.get('name')}* ({t.get('rank') or '?'}) — {t.get('authority') or 'no authority'}  ")
+        md.append(
+            f"**Taxon**: *{t.get('name')}* ({t.get('rank') or '?'}) — {t.get('authority') or 'no authority'}  "
+        )
         md.append(f"**Status**: {t.get('status') or '?'}  ")
         tr = t.get("time_range_ma") or {}
         if tr.get("max") or tr.get("min"):
@@ -152,6 +162,7 @@ def _render_report(state):
         # Aggregate
         if recs:
             from collections import Counter
+
             ints = Counter(r.get("early_interval") for r in recs if r.get("early_interval"))
             fms = Counter(r.get("formation") for r in recs if r.get("formation"))
             cs = Counter(r.get("country") for r in recs if r.get("country"))
@@ -187,17 +198,25 @@ def _render_report(state):
     if items:
         for it in items:
             doi = it.get("DOI")
-            md.append(f"- {_format_authors(it.get('authors'))} ({it.get('published_date') or 'n.d.'}). "
-                      f"*{it.get('title', '?')}*. {it.get('container_title') or 'unknown'}. "
-                      f"{'https://doi.org/' + doi if doi else (it.get('URL') or '')}")
+            md.append(
+                f"- {_format_authors(it.get('authors'))} ({it.get('published_date') or 'n.d.'}). "
+                f"*{it.get('title', '?')}*. {it.get('container_title') or 'unknown'}. "
+                f"{'https://doi.org/' + doi if doi else (it.get('URL') or '')}"
+            )
     else:
         md.append("_None._")
 
     # 7. Limitations
     md.append("\n## 7. Limitations & Data Gaps\n")
-    md.append("- CrossRef does not index every paleontology journal. For Chinese-language journals, additional searches in CNKI / Wanfang are recommended.")
-    md.append("- PBDB coverage is biased toward North American and European fossils; non-Western collections may be under-represented.")
-    md.append("- Automated abstract summaries are heuristic — verify against the original paper before quoting.")
+    md.append(
+        "- CrossRef does not index every paleontology journal. For Chinese-language journals, additional searches in CNKI / Wanfang are recommended."
+    )
+    md.append(
+        "- PBDB coverage is biased toward North American and European fossils; non-Western collections may be under-represented."
+    )
+    md.append(
+        "- Automated abstract summaries are heuristic — verify against the original paper before quoting."
+    )
     md.append("- Taxonomic status may have changed since the last PBDB synchronisation.")
 
     md.append("\n---\n")
@@ -211,8 +230,12 @@ def main(argv=None):
     p.add_argument("--taxon", help="Optional taxon (for taxonomy + PBDB stages)")
     p.add_argument("--formation", help="Optional formation (for stratigraphy stage)")
     p.add_argument("--paper-rows", type=int, default=8)
-    p.add_argument("--summarise-top", type=int, default=3,
-                   help="Generate heuristic 3-bullet summaries for the top-N papers")
+    p.add_argument(
+        "--summarise-top",
+        type=int,
+        default=3,
+        help="Generate heuristic 3-bullet summaries for the top-N papers",
+    )
     p.add_argument("--out-dir", default="paleo_reports")
     p.add_argument("--skip-literature", action="store_true")
     p.add_argument("--skip-taxonomy", action="store_true")
@@ -293,17 +316,19 @@ def main(argv=None):
     md_path.write_text(md, encoding="utf-8")
     json_path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print_json({
-        "topic": args.topic,
-        "taxon": args.taxon,
-        "formation": args.formation,
-        "stages_run": state["stages"],
-        "report_md": str(md_path),
-        "report_json": str(json_path),
-        "report_size_bytes": md_path.stat().st_size,
-        "started_at": state["started_at"],
-        "completed_at": state["completed_at"],
-    })
+    print_json(
+        {
+            "topic": args.topic,
+            "taxon": args.taxon,
+            "formation": args.formation,
+            "stages_run": state["stages"],
+            "report_md": str(md_path),
+            "report_json": str(json_path),
+            "report_size_bytes": md_path.stat().st_size,
+            "started_at": state["started_at"],
+            "completed_at": state["completed_at"],
+        }
+    )
 
 
 if __name__ == "__main__":

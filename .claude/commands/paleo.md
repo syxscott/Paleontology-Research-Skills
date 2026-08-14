@@ -2,6 +2,17 @@
 description: PaleontologyResearchSkills toolkit overview & status
 allowed-tools: Bash, Read
 ---
+Before running any script, resolve the toolkit root (supports both
+**user-level** install at `~/.claude/skills/` and **project-level** install at
+`.claude/skills/`):
+
+```bash
+if [ -d "$HOME/.claude/skills/paleontology-research-skills" ]; then
+  PRS="$HOME/.claude/skills/paleontology-research-skills"
+else
+  PRS=".claude/skills/paleontology-research-skills"
+fi
+```
 
 Show the user a one-page overview of the **paleontology-research-skills** toolkit they have
 installed, and a quick status check.
@@ -10,8 +21,8 @@ Procedure:
 
 1. Run profile + memory status to confirm everything is wired:
    ```bash
-   python3 .claude/skills/paleontology-research-skills/paleo-profile/scripts/profile_load.py
-   python3 .claude/skills/paleontology-research-skills/paleo-memory/scripts/memory_status.py
+   python3 "$PRS"/paleo-profile/scripts/profile_load.py
+   python3 "$PRS"/paleo-memory/scripts/memory_status.py
    ```
 
 2. Present the user with this menu:

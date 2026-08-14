@@ -8,10 +8,9 @@ import math
 import os
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
-
 
 # ===== Paths =====
+
 
 def data_home() -> Path:
     override = os.environ.get("PALEONTOLOGY_RESEARCH_SKILLS_HOME")
@@ -20,17 +19,27 @@ def data_home() -> Path:
     return (Path.home() / ".paleontology-research-skills").resolve()
 
 
-def memory_root() -> Path: return data_home() / "memory"
-def sessions_root() -> Path: return data_home() / "sessions"
+def memory_root() -> Path:
+    return data_home() / "memory"
+
+
+def sessions_root() -> Path:
+    return data_home() / "sessions"
+
+
 def profile_files():
-    h = data_home(); return h / "soul.md", h / "user.md"
+    h = data_home()
+    return h / "soul.md", h / "user.md"
 
 
 # ===== File I/O =====
 
+
 def read_text_file(path, default=""):
-    try: return Path(path).read_text(encoding="utf-8")
-    except (FileNotFoundError, OSError): return default
+    try:
+        return Path(path).read_text(encoding="utf-8")
+    except (FileNotFoundError, OSError):
+        return default
 
 
 def write_text_file(path, content):
@@ -39,8 +48,10 @@ def write_text_file(path, content):
 
 
 def read_json(path, default=None):
-    try: return json.loads(Path(path).read_text(encoding="utf-8"))
-    except (FileNotFoundError, json.JSONDecodeError, OSError): return default
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return default
 
 
 def write_json(path, data):
@@ -48,7 +59,8 @@ def write_json(path, data):
     Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def print_json(data): print(json.dumps(data, ensure_ascii=False, indent=2))
+def print_json(data):
+    print(json.dumps(data, ensure_ascii=False, indent=2))
 
 
 # Profile parsing
@@ -58,13 +70,15 @@ _HR_RE = re.compile(r"^[-*_]{3}$")
 
 
 def split_sections(md):
-    sec = {}; cur = ""
+    sec = {}
+    cur = ""
     for line in md.split("\n"):
         m = _HEADING_RE.match(line)
         if m:
             cur = m.group(1).strip().lower().rstrip(":")
             sec[cur] = []
-        elif cur and line.strip(): sec[cur].append(line)
+        elif cur and line.strip():
+            sec[cur].append(line)
     return {k: "\n".join(v).strip() for k, v in sec.items()}
 
 
@@ -72,17 +86,25 @@ def _section_items(text):
     items = []
     for line in text.split("\n"):
         t = line.strip()
-        if not t or _HR_RE.match(t): continue
+        if not t or _HR_RE.match(t):
+            continue
         m = _ITEM_RE.match(t)
-        if m: items.append(m.group(1).strip()); continue
+        if m:
+            items.append(m.group(1).strip())
+            continue
         if ":" in t:
             v = t.split(":", 1)[1].strip()
-            if v: items.append(v); continue
-        if len(t) > 2: items.append(t)
+            if v:
+                items.append(v)
+                continue
+        if len(t) > 2:
+            items.append(t)
     seen, uniq = set(), []
     for i in items:
         k = i.lower().strip()
-        if k and k not in seen: seen.add(k); uniq.append(i)
+        if k and k not in seen:
+            seen.add(k)
+            uniq.append(i)
     return uniq
 
 
@@ -95,7 +117,8 @@ def load_profile():
     sp, up = profile_files()
     s = read_text_file(sp, _DEFAULT_SOUL)
     u = read_text_file(up, _DEFAULT_USER)
-    ss = split_sections(s); us = split_sections(u)
+    ss = split_sections(s)
+    us = split_sections(u)
     role = _kv(us.get("identity", ""), "Role", "paleontology researcher")
     domain = _kv(us.get("identity", ""), "Domain", "vertebrate paleontology")
     inst = _kv(us.get("identity", ""), "Institution", "")
@@ -103,11 +126,15 @@ def load_profile():
     out_lang = _kv(lang, "Output language", "Chinese")
     pref_lang = _kv(lang, "Preferred language", "Chinese or English")
     d = us.get("data preferences", "")
-    try: lim = int(_kv(d, "Default occurrence limit", "50") or "50")
-    except ValueError: lim = 50
+    try:
+        lim = int(_kv(d, "Default occurrence limit", "50") or "50")
+    except ValueError:
+        lim = 50
     pre = _kv(d, "Include preprints", "false").lower() == "true"
     oa = _kv(d, "Prefer open access", "true").lower() == "true"
-    safety = _section_items(ss.get("safety boundaries", "")) or _section_items(ss.get("paleontology-research-skills must not", ""))
+    safety = _section_items(ss.get("safety boundaries", "")) or _section_items(
+        ss.get("paleontology-research-skills must not", "")
+    )
     return {
         "soul": {
             "identity": ss.get("identity", "").strip(),
@@ -121,7 +148,9 @@ def load_profile():
             },
         },
         "user": {
-            "role": role, "domain": domain, "institution": inst,
+            "role": role,
+            "domain": domain,
+            "institution": inst,
             "researchFocus": {
                 "primaryInterests": _section_items(us.get("primary interests", "")),
                 "preferredPeriods": _section_items(us.get("preferred geological periods", "")),
@@ -143,7 +172,9 @@ def load_profile():
 # Memory primitives
 _TOK = re.compile(r"[A-Za-z0-9_]+")
 
-def tokenize(text): return [t.lower() for t in _TOK.findall(text or "")]
+
+def tokenize(text):
+    return [t.lower() for t in _TOK.findall(text or "")]
 
 
 def hashing_vector(text, dim=384):
@@ -154,12 +185,14 @@ def hashing_vector(text, dim=384):
         sign = 1.0 if int(h[8:10], 16) % 2 == 0 else -1.0
         counts[idx] = counts.get(idx, 0.0) + sign
     norm = math.sqrt(sum(v * v for v in counts.values()))
-    if norm == 0: return {}
+    if norm == 0:
+        return {}
     return {k: v / norm for k, v in counts.items()}
 
 
 def cosine_similarity(a, b):
-    if not a or not b: return 0.0
+    if not a or not b:
+        return 0.0
     small, big = (a, b) if len(a) < len(b) else (b, a)
     return sum(v * big.get(k, 0.0) for k, v in small.items())
 
@@ -313,7 +346,8 @@ Citation format: APA
 
 
 # ===== Taxon normalisation (delegated to taxonomy.py) =====
-import sys as _sys
+import sys as _sys  # noqa: E402 - deliberate late import to break cycles
+
 _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in _sys.path:
     _sys.path.insert(0, _HERE)
@@ -335,6 +369,7 @@ def normalize_taxon(text):
 
 
 # ===== Memory iteration & search =====
+
 
 def _iter_short_memory():
     short = memory_root() / "short"
@@ -416,4 +451,3 @@ def search_memory(query, scope="all", top_k=3, min_score=0.12):
                 hits.append(e)
     hits.sort(key=lambda x: x.get("score", 0.0), reverse=True)
     return hits[: max(1, int(top_k))]
-

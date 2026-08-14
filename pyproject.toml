@@ -70,7 +70,10 @@ target-version = "py39"
 select = ["E", "F", "W", "I", "B", "UP"]
 ignore = [
     "E501",   # line too long — we already cap at 110
+    "E701",   # compact one-line if/for bodies — deliberate style in this repo
+    "E702",   # compact one-line statements — deliberate style in this repo
     "B008",   # function call as default arg — fine for argparse
+    "UP045",  # `Optional[str]` is kept for Python 3.9 compatibility
 ]
 
 [tool.pytest.ini_options]

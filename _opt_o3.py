@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Optimization Batch O3 — P2 docs / tests / Makefile / community files."""
+
 import pathlib
 
 ROOT = pathlib.Path(r"D:\GIthub\自制Claude Code skills")
@@ -7,7 +8,7 @@ ROOT = pathlib.Path(r"D:\GIthub\自制Claude Code skills")
 FILES = {}
 
 # ============ CODE_OF_CONDUCT.md (Contributor Covenant 2.1) ============
-FILES[ROOT / "CODE_OF_CONDUCT.md"] = '''# Contributor Covenant Code of Conduct
+FILES[ROOT / "CODE_OF_CONDUCT.md"] = """# Contributor Covenant Code of Conduct
 
 ## Our pledge
 
@@ -82,11 +83,11 @@ Community leaders will follow these guidelines in determining consequences:
 
 This Code of Conduct is adapted from the
 [Contributor Covenant, version 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
-'''
+"""
 
 
 # ============ AUTHORS.md ============
-FILES[ROOT / "AUTHORS.md"] = '''# Authors
+FILES[ROOT / "AUTHORS.md"] = """# Authors
 
 ## Maintainer
 
@@ -114,11 +115,11 @@ This toolkit builds on:
 - The **CrossRef**, **Semantic Scholar**, **arXiv**, **NCBI Taxonomy**,
   **Wikidata**, **Macrostrat**, and **ICS** data providers
 - The **Anthropic Claude** model family — co-developed this toolkit
-'''
+"""
 
 
 # ============ SUPPORT.md ============
-FILES[ROOT / "SUPPORT.md"] = '''# Getting help
+FILES[ROOT / "SUPPORT.md"] = """# Getting help
 
 Thanks for using **Paleontology Research Skills**! Here is where to look:
 
@@ -158,11 +159,11 @@ If you use **Paleontology Research Skills** in published research, please cite:
   version      = {1.0.0}
 }
 ```
-'''
+"""
 
 
 # ============ docs/FAQ.md ============
-FILES[ROOT / "docs" / "FAQ.md"] = '''# Frequently asked questions
+FILES[ROOT / "docs" / "FAQ.md"] = """# Frequently asked questions
 
 ## General
 
@@ -324,11 +325,11 @@ See [`CONTRIBUTING.md`](../CONTRIBUTING.md#adding-a-new-sub-skill).
 - **Sub-skill names**: `paleo-<topic>` (lowercase, hyphens, ≤ 64 chars)
 - **Slash commands**: short verb-noun (`/paleo-fossil`, `/paleo-classify`)
 - **Python scripts**: `<topic>_<verb>.py` (e.g. `pbdb_query.py`, `taxonomy_query.py`)
-'''
+"""
 
 
 # ============ docs/examples.md ============
-FILES[ROOT / "docs" / "examples.md"] = '''# Examples — end-to-end workflows
+FILES[ROOT / "docs" / "examples.md"] = """# Examples — end-to-end workflows
 
 These are concrete walkthroughs you can copy-paste. Replace placeholders.
 
@@ -564,11 +565,11 @@ python .claude/skills/paleontology-research-skills/paleo-china-news/scripts/chin
 
 Note: this scrapes public Chinese fossil news sites which may rate-limit or
 change HTML structure. Errors per source are reported in the output.
-'''
+"""
 
 
 # ============ docs/troubleshooting.md ============
-FILES[ROOT / "docs" / "troubleshooting.md"] = '''# Troubleshooting
+FILES[ROOT / "docs" / "troubleshooting.md"] = """# Troubleshooting
 
 Common errors and how to fix them.
 
@@ -785,12 +786,14 @@ It runs up to 5 network calls + 3-5 abstract summaries sequentially.
 - Search [Issues](https://github.com/syxscott/Paleontology-Research-Skills/issues)
 - Ask in [Discussions](https://github.com/syxscott/Paleontology-Research-Skills/discussions)
 - File a new bug report (`/paleo-fossil` template, or [bug report form](https://github.com/syxscott/Paleontology-Research-Skills/issues/new/choose))
-'''
+"""
 
 
 # ============ More unit tests for the new skills ============
 
-FILES[ROOT / "tests" / "test_morphometric_convert.py"] = r'''"""Tests for paleo-morphometric-convert format parsers and writers."""
+FILES[
+    ROOT / "tests" / "test_morphometric_convert.py"
+] = r'''"""Tests for paleo-morphometric-convert format parsers and writers."""
 import json
 import os
 import sys
@@ -995,7 +998,9 @@ if __name__ == "__main__":
 '''
 
 
-FILES[ROOT / "tests" / "test_morphometric_extract.py"] = r'''"""Tests for paleo-morphometric landmark extraction.
+FILES[
+    ROOT / "tests" / "test_morphometric_extract.py"
+] = r'''"""Tests for paleo-morphometric landmark extraction.
 
 These tests require Pillow. They are skipped if Pillow is not installed.
 """
@@ -1080,7 +1085,9 @@ if __name__ == "__main__":
 '''
 
 
-FILES[ROOT / "tests" / "test_session.py"] = r'''"""Tests for paleo-session session storage behaviour (offline)."""
+FILES[
+    ROOT / "tests" / "test_session.py"
+] = r'''"""Tests for paleo-session session storage behaviour (offline)."""
 import json
 import os
 import sys
@@ -1155,7 +1162,7 @@ if __name__ == "__main__":
 
 
 # ============ Makefile ============
-FILES[ROOT / "Makefile"] = '''# Paleontology Research Skills — common dev tasks
+FILES[ROOT / "Makefile"] = """# Paleontology Research Skills — common dev tasks
 # Usage:  make <target>
 #
 # Most targets work on Linux / macOS. On Windows use Git Bash or WSL.
@@ -1224,7 +1231,7 @@ clean:
 	rm -rf build dist *.egg-info .pytest_cache .coverage htmlcov
 
 all: format lint test validate smoke
-'''
+"""
 
 
 # Write all files

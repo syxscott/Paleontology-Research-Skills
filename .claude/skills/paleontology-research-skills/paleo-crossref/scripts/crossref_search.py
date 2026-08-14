@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Search CrossRef for paleontology literature metadata."""
+
 from __future__ import annotations
 
 import argparse
@@ -37,6 +38,9 @@ def _date(parts):
     if not parts:
         return None
     p = parts[0] if isinstance(parts, list) else parts
+    p = [x for x in p if x is not None]
+    if not p:
+        return None
     return "-".join(str(x).zfill(2) for x in p)
 
 
@@ -52,7 +56,7 @@ def _normalize(item, include_abstract):
         "authors": [_author(a) for a in (item.get("author") or [])],
         "container_title": (item.get("container-title") or [""])[0] or None,
         "publisher": item.get("publisher"),
-        "published_date": _date(((item.get("issued") or {}).get("date-parts"))),
+        "published_date": _date((item.get("issued") or {}).get("date-parts")),
         "type": item.get("type"),
         "URL": item.get("URL"),
         "resource_link": ((item.get("resource") or {}).get("primary") or {}).get("URL"),
@@ -68,8 +72,12 @@ def main(argv=None):
     p.add_argument("--rows", type=int, default=10)
     p.add_argument("--include-abstract", action="store_true")
     p.add_argument("--respect-profile", action="store_true")
-    p.add_argument("--filter-from-year", type=int, default=None,
-                   help="Only include works published in or after this year")
+    p.add_argument(
+        "--filter-from-year",
+        type=int,
+        default=None,
+        help="Only include works published in or after this year",
+    )
     args = p.parse_args(argv)
 
     if args.respect_profile:
@@ -104,13 +112,15 @@ def main(argv=None):
 
     msg = data.get("message", {})
     items = [_normalize(it, args.include_abstract) for it in (msg.get("items") or [])]
-    print_json({
-        "source": "CrossRef",
-        "query": args.query,
-        "total_results": msg.get("total-results"),
-        "count": len(items),
-        "items": items,
-    })
+    print_json(
+        {
+            "source": "CrossRef",
+            "query": args.query,
+            "total_results": msg.get("total-results"),
+            "count": len(items),
+            "items": items,
+        }
+    )
 
 
 if __name__ == "__main__":
